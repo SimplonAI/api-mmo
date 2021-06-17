@@ -12,6 +12,18 @@ ou
 ```shell
 git clone https://github.com/SimplonAI/api-mmo
 cd api-mmo
+python -m venv venv
+```
+Sur Windows exécutez :
+```shell
+venv/Scripts/activate
+```
+ou sur Linux :
+```shell
+venv/bin/activate
+```
+Ensuite finir par :
+```
 pip install requirements.txt
 flask init-db
 ```
