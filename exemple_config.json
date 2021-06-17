@@ -1,6 +1,7 @@
 {
     "SECRET": "test",
-    "Postgres": {
+    "default_db": "postgres",
+    "postgres": {
         "connector": "postgresql",
         "user": "simplon",
         "password": "simplon",
