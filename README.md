@@ -25,7 +25,6 @@ venv/bin/activate
 Ensuite finir par :
 ```
 pip install -r requirements.txt
-flask init-db
 ```
 
 # Configuration
@@ -34,6 +33,17 @@ Ouvrir le fichier `exemple_config.json` et remplacer les valeurs par défaut par
 mkdir instance
 cp exemple_config.json instance/config.json
 ```
+Ensuite exécuter les commandes de configuration pour la BDD:
+```shell
+flask db upgrade
+flask insert-db
+```
+
+# Créer un utilisateur
+Afin d'utiliser l'app, vous allez devoir vous connecter avec un utilisateur. Pour le créer :
+```shell
+flask create-db
+`` 
 
 # Exécution
 Pour lancer l'app, vous devrez taper la commande :
