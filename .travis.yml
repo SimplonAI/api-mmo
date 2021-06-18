@@ -6,4 +6,6 @@ dist: xenial
 language: python
 
 script:
+  - mkdir instance
+  - cp exemple_config.json instance/config.json
   - python -m pytest -v
