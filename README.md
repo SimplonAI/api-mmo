@@ -25,7 +25,6 @@ venv/bin/activate
 Ensuite finir par :
 ```
 pip install -r requirements.txt
-flask init-db
 ```
 
 # Configuration
@@ -33,6 +32,11 @@ Ouvrir le fichier `exemple_config.json` et remplacer les valeurs par défaut par
 ```shell
 mkdir instance
 cp exemple_config.json instance/config.json
+```
+Ensuite exécuter les commandes de configuration pour la BDD:
+```shell
+flask db migrate
+flask init-db
 ```
 
 # Exécution
