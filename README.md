@@ -39,6 +39,12 @@ flask db upgrade
 flask insert-db
 ```
 
+# Créer un utilisateur
+Afin d'utiliser l'app, vous allez devoir vous connecter avec un utilisateur. Pour le créer :
+```shell
+flask create-db
+`` 
+
 # Exécution
 Pour lancer l'app, vous devrez taper la commande :
 ```shell
