@@ -28,6 +28,7 @@ def create_app(test_config=None):
     # On initialise SQLAlchemy avec les éléments de config à la BDD
     db.init_app(app)
 
+    # On importe les models afin que flask_migrate les connaisse
     from app.database.models import Utilisateur, House
 
     # On initialise l'outil de migration
