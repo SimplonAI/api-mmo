@@ -1,7 +1,7 @@
 {
     "SECRET": "test",
-    "default_db": "postgres",
-    "postgres": {
+    "DEFAULT_DB": "POSTGRES",
+    "POSTGRES": {
         "connector": "postgresql",
         "user": "simplon",
         "password": "simplon",

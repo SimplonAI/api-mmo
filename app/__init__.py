@@ -4,15 +4,16 @@ import json
 
 from app.database.db import db
 from app.controllers import main_controller
-from app.insert_db import insert_db
+from app.insert_db import insert_db, create_user
 
 migrate = Migrate()
+
 
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
 
     app.config.from_file("config.json", load=json.load)
-    
+
     if test_config is not None:
         app.config.from_mapping(test_config)
 
@@ -21,7 +22,7 @@ def create_app(test_config=None):
         app.config.from_mapping(
             {
                 "SQLALCHEMY_DATABASE_URI": f"{dbconfig['connector']}://{dbconfig['user']}:{dbconfig['password']}@{dbconfig['host']}:{dbconfig['port']}/{dbconfig['bdd']}",
-                "SQLALCHEMY_TRACK_MODIFICATIONS": False
+                "SQLALCHEMY_TRACK_MODIFICATIONS": False,
             }
         )
 
@@ -37,8 +38,10 @@ def create_app(test_config=None):
     # On ajoute la commande "flask insert-db" à l'application
     app.cli.add_command(insert_db)
 
+    # On ajoute la commande "flask create-user" à l'application
+    app.cli.add_command(create_user)
+
     # On enregistre les différents controllers pour les routes
     # On ajoute le controller pour les urls de haut niveau ("/", "/login", "/contact", ...)
     app.register_blueprint(main_controller)
-
     return app

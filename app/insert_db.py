@@ -2,6 +2,10 @@ import click
 import pandas as pd
 from flask.cli import with_appcontext
 from app.database.db import db
+from app.database.models import Utilisateur
+from getpass import getpass
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 
 @click.command("insert-db")
@@ -52,3 +56,23 @@ def insert_db():
     data_housing.rename_axis(index="ho_id")
     data_housing.to_sql("house", if_exists="append", con=db.engine, index=False)
     print("Tout a été inséré dans la base de données !")
+
+@click.command("create-user")
+@with_appcontext
+def create_user():
+    """Insert un utilisateur la base de données de l'application
+    """
+
+    mail = input("Entrez votre addresse mail : ")
+    password = getpass("Entrer le mot de passe utilisateur : ")
+    confirm_password = getpass("Veuillez confirmer votre mot de passe : ")
+    if confirm_password == password:
+        insert_user = Utilisateur(mail=mail, password=generate_password_hash(password))
+        db.session.add(insert_user)
+        db.session.commit()
+        print("Utilisateur ajouté !")
+    else:
+        print("Mot de passe non identique")
+    
+    
+        
