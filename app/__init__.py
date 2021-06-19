@@ -1,5 +1,3 @@
-import os
-
 from flask import Flask
 from flask_migrate import Migrate
 import json
@@ -9,29 +7,23 @@ from app.database.db import db
 from app.controllers import main_controller
 from app.db_commands import insert_db, create_user
 
-
 migrate = Migrate()
 
 
-def create_app(config_name):
+def create_app(test_config=None):
+    app = Flask(__name__, instance_relative_config=True)
 
     if os.path.isfile(app.instance_path + '/config.json'):
         app.config.from_file("config.json", load=json.load)
 
-    if os.getenv('FLASK_CONFIG') == "production":
-        app = Flask(__name__)
-        app.config.update(
-            SECRET_KEY=os.getenv('SECRET_KEY'),
-            SQLALCHEMY_DATABASE_URI=os.getenv('SQLALCHEMY_DATABASE_URI')
+    if "DEFAULT_DB" in app.config:
+        dbconfig = app.config[app.config["DEFAULT_DB"]]
+        app.config.from_mapping(
+            {
+                "SQLALCHEMY_DATABASE_URI": f"{dbconfig['connector']}://{dbconfig['user']}:{dbconfig['password']}@{dbconfig['host']}:{dbconfig['port']}/{dbconfig['bdd']}",
+                "SQLALCHEMY_TRACK_MODIFICATIONS": False,
+            }
         )
-    else:
-        app = Flask(__name__, instance_relative_config=True)
-        
-        #app.config.from_object(app_config[config_name])
-        app.config.from_pyfile('config.py')
-
-
-    
 
     if "SQLALCHEMY_DATABASE_URI" in os.environ:
         app.config.from_mapping({
