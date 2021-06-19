@@ -3,10 +3,11 @@ import os
 from flask import Flask
 from flask_migrate import Migrate
 import json
+import os
 
 from app.database.db import db
 from app.controllers import main_controller
-from app.insert_db import insert_db, create_user
+from app.db_commands import insert_db, create_user
 
 
 migrate = Migrate()
@@ -14,6 +15,8 @@ migrate = Migrate()
 
 def create_app(config_name):
 
+    if os.path.isfile(app.instance_path + '/config.json'):
+        app.config.from_file("config.json", load=json.load)
 
     if os.getenv('FLASK_CONFIG') == "production":
         app = Flask(__name__)
@@ -29,6 +32,15 @@ def create_app(config_name):
 
 
     
+
+    if "SQLALCHEMY_DATABASE_URI" in os.environ:
+        app.config.from_mapping({
+            "SQLALCHEMY_DATABASE_URI": os.environ["SQLALCHEMY_DATABASE_URI"]
+        })
+    
+    if test_config is not None:
+        app.config.from_mapping(test_config)
+
 
     # On initialise SQLAlchemy avec les éléments de config à la BDD
     db.init_app(app)

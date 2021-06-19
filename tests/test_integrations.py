@@ -19,6 +19,8 @@ def client():
     yield client
 
 def test_index(client):
+    """Test for the index page
+    """
     rv = client.get('/')
     assert rv.status_code == 200
     assert b'Hello World ! Agile' in rv.data
