@@ -4,7 +4,7 @@ import json
 
 from app.database.db import db
 from app.controllers import main_controller
-from app.insert_db import insert_db, create_user
+from app.db_commands import insert_db, create_user
 
 migrate = Migrate()
 
