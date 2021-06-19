@@ -3,19 +3,27 @@ version: '3'
 services:
   website:
     build: .
-    links:
+    depends_on:
       - db
     ports:
         - '5000:5000'
-
+    environment:
+      SQLALCHEMY_DATABASE_URI: postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db/${POSTGRES_DB}
+    volumes:
+      - ./app:/usr/src/app/app
+      - ./migrations:/usr/src/app/migrations
   db:
     image: postgres
     container_name: pg-docker    
     ports:
       - "5400:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_USER=docker
-      - POSTGRES_PASSWORD=docker
-      - POSTGRES_DB=db_housing
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     restart: always
 
+volumes:
+  postgres_data:
