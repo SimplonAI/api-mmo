@@ -11,7 +11,7 @@ def client():
         "SQLALCHEMY_TRACK_MODIFICATIONS": False
     })
     app.config['TESTING'] = True
-    app.config['SERVER_NAME'] = 'TEST'
+    app.config['SERVER_NAME'] = 'example.com'
     client = app.test_client()
     with app.app_context():
         pass
