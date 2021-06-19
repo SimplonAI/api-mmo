@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_migrate import Migrate
 import json
@@ -6,25 +8,27 @@ from app.database.db import db
 from app.controllers import main_controller
 from app.insert_db import insert_db, create_user
 
+
 migrate = Migrate()
 
 
-def create_app(test_config=None):
-    app = Flask(__name__, instance_relative_config=True)
+def create_app(config_name):
 
-    app.config.from_file("config.json", load=json.load)
 
-    if test_config is not None:
-        app.config.from_mapping(test_config)
-
-    if "DEFAULT_DB" in app.config:
-        dbconfig = app.config[app.config["DEFAULT_DB"]]
-        app.config.from_mapping(
-            {
-                "SQLALCHEMY_DATABASE_URI": f"{dbconfig['connector']}://{dbconfig['user']}:{dbconfig['password']}@{dbconfig['host']}:{dbconfig['port']}/{dbconfig['bdd']}",
-                "SQLALCHEMY_TRACK_MODIFICATIONS": False,
-            }
+    if os.getenv('FLASK_CONFIG') == "production":
+        app = Flask(__name__)
+        app.config.update(
+            SECRET_KEY=os.getenv('SECRET_KEY'),
+            SQLALCHEMY_DATABASE_URI=os.getenv('SQLALCHEMY_DATABASE_URI')
         )
+    else:
+        app = Flask(__name__, instance_relative_config=True)
+        
+        #app.config.from_object(app_config[config_name])
+        app.config.from_pyfile('config.py')
+
+
+    
 
     # On initialise SQLAlchemy avec les éléments de config à la BDD
     db.init_app(app)

@@ -2,10 +2,14 @@
 
 mkdir instance
 cp exemple_config.json /instance/config.json
+cp exemple_config.py /instance/config.py
+
 
 flask db init
 flask db migrate
 flask db upgrade
 flask insert-db
-flask create-user
 
+
+cd /API-IMO
+python run.py

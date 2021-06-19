@@ -2,8 +2,8 @@
 FROM python:3.9.5-slim-buster
 #apt is the ubuntu command line tool for advanced packaging tool(APT) for sw upgrade '''
 
-#RUN apt update && \ apt install -y netcat-openbsd
-EXPOSE 5000
+RUN apt update && \ 
+    apt install -y netcat-openbsd
 #RUN apt-get install -y python-pip python-dev
 
 
