@@ -8,6 +8,4 @@ python:
   - "3.9"
 
 script:
-  - mkdir instance
-  - cp exemple_config.json instance/config.json
   - python -m pytest -v
