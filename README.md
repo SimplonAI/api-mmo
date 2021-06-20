@@ -8,6 +8,7 @@ Notre application se base sur le dataset Housing California de 1990.
 * PostgreSQL
 ou
 * Docker
+    * Suivre seulement l'étape Docker
 
 # Installation
 ```shell
@@ -44,7 +45,7 @@ flask insert-db
 Afin d'utiliser l'app, vous allez devoir vous connecter avec un utilisateur. Pour le créer :
 ```shell
 flask create-db
-`` 
+```
 
 # Exécution
 Pour lancer l'app, vous devrez taper la commande :
@@ -52,5 +53,13 @@ Pour lancer l'app, vous devrez taper la commande :
 flask run
 ```
 
-
-docker-compose up --build -d
+# Docker
+Si vous voulez vous éviter toutes les instructions précédentes, il est conseillé d'utiliser Docker.
+1. Il faut configurer les variables environnements de Postgres dans un fichier .env à placer à la racine de l'application (renommer le fichier `.env.exemple` en `.env` suffit amplement) :
+```shell
+cp .env.exemple .env
+```
+2. Construire et exécuter l'image docker :
+```shell
+docker-compose up -d
+```
