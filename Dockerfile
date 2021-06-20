@@ -20,4 +20,6 @@ EXPOSE 5000
 
 COPY . .
 
-ENTRYPOINT ["app-entrypoint.sh"]
+RUN chmod 755 app-entrypoint.sh
+
+ENTRYPOINT ["/app/app-entrypoint.sh", "db"]
