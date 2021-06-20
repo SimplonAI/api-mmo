@@ -51,3 +51,6 @@ Pour lancer l'app, vous devrez taper la commande :
 ```shell
 flask run
 ```
+
+
+docker-compose up --build -d
