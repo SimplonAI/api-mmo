@@ -11,55 +11,55 @@ ou
     * Suivre seulement l'étape Docker
 
 # Installation
-```shell
+```console
 git clone https://github.com/SimplonAI/api-mmo
 cd api-mmo
 python -m venv venv
 ```
 Sur Windows exécutez :
-```shell
+```console
 venv/Scripts/activate
 ```
 ou sur Linux :
-```shell
-venv/bin/activate
+```console
+source venv/bin/activate
 ```
 Ensuite finir par :
-```
+```console
 pip install -r requirements.txt
 ```
 
 # Configuration
 Ouvrir le fichier `exemple_config.json` et remplacer les valeurs par défaut par celle de votre environnement. Copier ensuite ce fichier dans un dossier instance et le renommer config.json.
-```shell
+```console
 mkdir instance
 cp exemple_config.json instance/config.json
 ```
 Ensuite exécuter les commandes de configuration pour la BDD:
-```shell
+```console
 flask db upgrade
 flask insert-db
 ```
 
 # Créer un utilisateur
 Afin d'utiliser l'app, vous allez devoir vous connecter avec un utilisateur. Pour le créer :
-```shell
+```console
 flask create-db
 ```
 
 # Exécution
 Pour lancer l'app, vous devrez taper la commande :
-```shell
+```console
 flask run
 ```
 
 # Docker
 Si vous voulez vous éviter toutes les instructions précédentes, il est conseillé d'utiliser Docker.
 1. Il faut configurer les variables environnements de Postgres dans un fichier .env à placer à la racine de l'application (renommer le fichier `.env.exemple` en `.env` suffit amplement) :
-```shell
+```console
 cp .env.exemple .env
 ```
 2. Construire et exécuter l'image docker :
-```shell
+```console
 docker-compose up -d
 ```
