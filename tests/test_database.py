@@ -7,7 +7,7 @@ import pandas as pd
 from flask import jsonify
 from app import create_app
 from app.database.db import db
-from app.database.models import House, Utilisateur
+from app.database.models import House, User, UserRole, ModelParams
 from app.db_commands import insert_db
 
 @pytest.fixture
@@ -28,7 +28,7 @@ def client():
 def test_db_schema(client):
     """Check if tables have successfully been added to the db
     """
-    table_names = ["utilisateur", "house"]
+    table_names = ["user", "house", "user_role", "model_param"]
     with db.engine.connect() as connexion:
         for table_name in table_names:
             assert db.engine.dialect.has_table(connexion, table_name) == True    

@@ -38,7 +38,7 @@ def create_app(test_config=None):
     db.init_app(app)
 
     # On importe les models afin que flask_migrate les connaisse
-    from app.database.models import Utilisateur, House
+    from app.database.models import User, House, UserRole, ModelParams
 
     # On initialise l'outil de migration
     migrate.init_app(app, db)

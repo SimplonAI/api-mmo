@@ -16,7 +16,7 @@ class House(db.Model):
     median_income = db.Column("ho_median_income", db.Numeric(6, 4), nullable=False)
     median_house_value = db.Column("ho_median_house_value", db.Integer, nullable=False)
     ocean_proximity = db.Column("ho_ocean_proximity", db.String(10), nullable=False)
-    created_date = db.Column("ho_created_date", db.DateTime, nullable=False)
+    created_date = db.Column("ho_created_date", db.DateTime, server_default=db.func.now(), nullable=False)
 
     def insert_from_pd(data_housing: DataFrame):
         data_housing = data_housing.rename(
@@ -60,5 +60,5 @@ class ModelParams(db.Model):
     l1_ratio = db.Column("mp_l1_ratio", db.Numeric(6,5), nullable=False)
     max_iter = db.Column("mp_max_iter", db.Integer, nullable=False)
     active = db.Column("mp_active", db.Boolean, default=False, nullable=False)
-    created_date = db.Column("ho_created_date", db.DateTime, nullable=False)
+    created_date = db.Column("ho_created_date", db.DateTime, server_default=db.func.now(), nullable=False)
 
