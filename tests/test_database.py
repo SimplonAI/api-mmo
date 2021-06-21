@@ -1,7 +1,7 @@
 from operator import index
 from pandas.core.frame import DataFrame
 from pandas._testing import assert_frame_equal
-from app.utils import format_data_housing
+from app.utils import format_data_housing, house_results_to_dataframe
 import pytest
 import pandas as pd
 from flask import jsonify
@@ -41,19 +41,5 @@ def test_inserted_data(client):
     House.insert_from_pd(data)
     houses: DataFrame = pd.read_sql("SELECT * FROM house", db.engine)
     assert len(houses) == data.shape[0]
-    houses.drop(columns=["ho_id", "ho_created_date"], inplace=True)
-    houses = houses.rename(
-        columns={
-            "ho_longitude": "longitude",
-            "ho_latitude": "latitude",
-            "ho_housing_median_age": "housing_median_age",
-            "ho_total_rooms": "total_rooms",
-            "ho_total_bedrooms": "total_bedrooms",
-            "ho_population": "population",
-            "ho_households": "households",
-            "ho_median_income": "median_income",
-            "ho_median_house_value": "median_house_value",
-            "ho_ocean_proximity": "ocean_proximity",
-        }
-    )
+    houses = house_results_to_dataframe(houses)
     assert_frame_equal(houses, data)
