@@ -5,7 +5,7 @@ import os
 
 from app.database.db import db
 from app.controllers import main_controller
-from app.db_commands import insert_db, create_user
+from app.db_commands import insert_db, create_user, predict_value
 
 migrate = Migrate()
 
@@ -38,7 +38,7 @@ def create_app(test_config=None):
     db.init_app(app)
 
     # On importe les models afin que flask_migrate les connaisse
-    from app.database.models import Utilisateur, House
+    from app.database.models import User, House, UserRole, ModelParams
 
     # On initialise l'outil de migration
     migrate.init_app(app, db)
@@ -48,6 +48,9 @@ def create_app(test_config=None):
 
     # On ajoute la commande "flask create-user" à l'application
     app.cli.add_command(create_user)
+
+    # On ajoute la commande "flask predict-value" à l'application
+    app.cli.add_command(predict_value)
 
     # On enregistre les différents controllers pour les routes
     # On ajoute le controller pour les urls de haut niveau ("/", "/login", "/contact", ...)
