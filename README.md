@@ -69,9 +69,7 @@ Lister les conteneur actif :
 docker ps
 ```
 Selectionner le "CONTAINER_ID" du conteneur "api-mmo_website"
-```console
-docker ps
-```
+
 Connecter vous au au bash du conteneur :
 
 ```console
