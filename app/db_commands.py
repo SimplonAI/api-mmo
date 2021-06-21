@@ -37,7 +37,7 @@ def insert_db():
     for role in roles:
         db.session.add(role)
     print("Roles ajoutées")
-    db.session.add(ModelParams(alpha=0.001, l1_ratio=0, max_iter=700, active=True))
+    db.session.add(ModelParams(alpha=0.0001, l1_ratio=0, max_iter=700, active=True))
     print("Paramètres du modèle par défaut ajoutés")
     db.session.commit()
     print("Tout a été inséré dans la base de données !")
@@ -67,6 +67,9 @@ def create_user():
 def predict_value():
     """Prédit la valeur médiane d'une maison
     """
+    mp = ModelParams.query.filter_by(active=True).first()
+    if mp is None:
+        return
     data = pd.read_sql("SELECT * FROM house", db.engine)
     data = house_results_to_dataframe(data)
     ocean_proximity = ["NEAR BAY", "<1H OCEAN", "INLAND", "NEAR OCEAN", "ISLAND"]
@@ -86,5 +89,5 @@ def predict_value():
         revenu_median = float(revenu_median)
     else:
         revenu_median = None
-    y = regression(data, pd.DataFrame.from_dict(d_test), revenu_median)
+    y = regression(data, pd.DataFrame.from_dict(d_test), revenu_median, mp)
     print(f"Prix médian prédit : {y}")

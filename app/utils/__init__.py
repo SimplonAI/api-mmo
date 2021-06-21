@@ -61,7 +61,7 @@ def house_results_to_dataframe(data_housing: pd.DataFrame):
     )
     return data_housing
 
-def regression(data, x_test, y_true = None):
+def regression(data, x_test, y_true = None, params = None):
     X = data.drop("median_house_value", axis=1)
     housing_num = X.drop(["ocean_proximity"], axis=1)
     col_names = "total_rooms", "total_bedrooms", "population", "households"
@@ -98,9 +98,12 @@ def regression(data, x_test, y_true = None):
     X_noisland = data_no_island.drop("median_house_value", axis=1)
     y_no_island = data_no_island["median_house_value"]
     X_train_no_island, X_test_no_island, y_train_no_island, y_test_no_island = train_test_split(X_noisland, y_no_island, test_size=0.33, random_state=1)
+    
     housing_prepared_no_island = full_pipeline.fit_transform(X_train_no_island)
-    sgd = SGDRegressor(l1_ratio=0, alpha=0.0001, max_iter=700, penalty="elasticnet")
+
+    sgd = SGDRegressor(l1_ratio=params.l1_ratio, alpha=params.alpha, max_iter=params.max_iter, penalty="elasticnet")
     sgd.fit(housing_prepared_no_island, y_train_no_island)
+
     print(f"R² : {sgd.score(housing_prepared_no_island, y_train_no_island)}")
     housing_valid_no_island = full_pipeline.transform(x_test)
     y_pred = sgd.predict(housing_valid_no_island)
