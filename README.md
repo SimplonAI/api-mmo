@@ -63,3 +63,20 @@ cp .env.exemple .env
 ```console
 docker-compose up -d
 ```
+3. Connexion au conteneur de l'appplication :
+    * Lister les conteneur actif :
+```console
+docker ps
+```
+    *  Selectionner le "CONTAINER_ID" du conteneur "api-mmo_website"
+```console
+docker ps
+```
+    * Connecter vous au au bash du conteneur :
+```console
+docker exec -it "CONTAINER_ID" bash
+```
+4. Création de l'utilisateur de l'application Flask
+ ```console
+flask create-user
+ ```
