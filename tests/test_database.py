@@ -4,20 +4,19 @@ from pandas._testing import assert_frame_equal
 from app.utils import format_data_housing, house_results_to_dataframe
 import pytest
 import pandas as pd
-from flask import jsonify
 from app import create_app
-from app.database.db import db
-from app.database.models import House, User, UserRole, ModelParams
-from app.db_commands import insert_db
+from app.db import db
+from app.models import House, User, UserRole, ModelParams
 
 @pytest.fixture
 def client():
     app = create_app({
+        "TESTING": True,
+        "SERVER_NAME": "exemple.com",
         "SQLALCHEMY_DATABASE_URI": "sqlite://",
-        "SQLALCHEMY_TRACK_MODIFICATIONS": False
+        "SQLALCHEMY_TRACK_MODIFICATIONS": False,
+        "SECRET_KEY": "test"
     })
-    app.config['TESTING'] = True
-    app.config['SERVER_NAME'] = 'example.com'
     client = app.test_client()
     with app.app_context():
         pass
@@ -42,4 +41,4 @@ def test_inserted_data(client):
     houses: DataFrame = pd.read_sql("SELECT * FROM house", db.engine)
     assert len(houses) == data.shape[0]
     houses = house_results_to_dataframe(houses)
-    assert_frame_equal(houses, data)
+    assert_frame_equal(houses, data, check_dtype=False)
