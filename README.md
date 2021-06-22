@@ -53,6 +53,12 @@ Pour lancer l'app, vous devrez taper la commande :
 flask run
 ```
 
+# Estimer un prix médian
+Afin d'estimer un prix médian grâce à notre fonction ML, vous aurez besoin de rentrer les informations demandés après avoir taper la commande :
+```console
+flask predict-value
+```
+
 # Docker
 Si vous voulez vous éviter toutes les instructions précédentes, il est conseillé d'utiliser Docker.
 1. Il faut configurer les variables environnements de Postgres dans un fichier .env à placer à la racine de l'application (renommer le fichier `.env.exemple` en `.env` suffit amplement) :
@@ -64,14 +70,15 @@ cp .env.exemple .env
 docker-compose up -d
 ```
 3. Connexion au conteneur de l'appplication et création d'un utilisateur:
-Lister les conteneur actif :
+    * Lister les conteneur actif :
 ```console
 docker ps
 ```
-Selectionner le "CONTAINER_ID" du conteneur "api-mmo_website"
+    * Selectionner le "CONTAINER_ID" du conteneur "api-mmo_website"
 
-Connecter vous au au bash du conteneur et crée l'utilisateur de l'application Flask:
+    * Connecter vous au bash du conteneur et crée l'utilisateur de l'application Flask:
 
 ```console
 docker exec -it "CONTAINER_ID" flask create-user
 ```
+    * De la même manière il sera possible d'exécuter les autres commandes flask.
