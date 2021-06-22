@@ -61,24 +61,24 @@ flask predict-value
 
 # Docker
 Si vous voulez vous éviter toutes les instructions précédentes, il est conseillé d'utiliser Docker.
-1. Il faut configurer les variables environnements de Postgres dans un fichier .env à placer à la racine de l'application (renommer le fichier `.env.exemple` en `.env` suffit amplement) :
+## Configuration
+Il faut configurer les variables environnements de Postgres dans un fichier .env à placer à la racine de l'application (renommer le fichier `.env.exemple` en `.env` suffit amplement) :
 ```console
 cp .env.exemple .env
 ```
-2. Construire et exécuter l'image docker :
+## Construire et exécuter l'image docker :
 ```console
 docker-compose up -d
 ```
-3. Connexion au conteneur de l'appplication et création d'un utilisateur:
-    * Lister les conteneur actif :
+## Connexion au conteneur de l'appplication et création d'un utilisateur:
+1. Lister les conteneur actif :
 ```console
 docker ps
 ```
-    * Selectionner le "CONTAINER_ID" du conteneur "api-mmo_website"
+2. Selectionner le "CONTAINER_ID" du conteneur "api-mmo_website"
 
-    * Connecter vous au bash du conteneur et crée l'utilisateur de l'application Flask:
-
+3. Connecter vous au bash du conteneur et crée l'utilisateur de l'application Flask:
 ```console
 docker exec -it "CONTAINER_ID" flask create-user
 ```
-    * De la même manière il sera possible d'exécuter les autres commandes flask.
+4. De la même manière il sera possible d'exécuter les autres commandes flask.
