@@ -10,4 +10,6 @@ login_manager = LoginManager()
 def load_user(user_id) -> User:
     return User.query.get(user_id)
 
+
+# Défini sur quelle route rediriger lorsqu'une route protégé par login_required est atteinte par un utilisateur non connecté
 login_manager.login_view = "main.login"
