@@ -1,15 +1,14 @@
 from collections import UserString
-from app.utils import format_data_housing, house_results_to_dataframe
 import click
 import pandas as pd
 from flask.cli import with_appcontext
-from app.db import db
-from app.models import House, User, UserRole, ModelParams
 from getpass import getpass
 from werkzeug.security import generate_password_hash
 from consolemenu import SelectionMenu
 
-from app.utils import regression
+from app.db import db
+from app.utils import format_data_housing, house_results_to_dataframe, regression
+from app.models import House, User, UserRole, ModelParams
 
 
 @click.command("insert-db")

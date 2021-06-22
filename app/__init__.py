@@ -3,8 +3,8 @@ from flask_migrate import Migrate
 import json
 import os
 
+from app import controllers
 from app.db import db
-from app.controllers import main_controller
 from app.db_commands import insert_db, create_user, predict_value
 from app.services import login_manager
 
@@ -58,5 +58,5 @@ def create_app(test_config=None):
 
     # On enregistre les différents controllers pour les routes
     # On ajoute le controller pour les urls de haut niveau ("/", "/login", "/contact", ...)
-    app.register_blueprint(main_controller)
+    controllers.init_app(app)
     return app
