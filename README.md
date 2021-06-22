@@ -1,5 +1,5 @@
 # App Agence Immobilière - Estimation de prix
-[![Build Status](https://travis-ci.com/SimplonAI/api-mmo.svg?token=54ssNXAp4tdWQ5mk1zsT&branch=main)] (https://travis-ci.com/SimplonAI/api-mmo)[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Build Status](https://travis-ci.com/SimplonAI/api-mmo.svg?token=54ssNXAp4tdWQ5mk1zsT&branch=main)](https://travis-ci.com/SimplonAI/api-mmo) [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
 Notre application se base sur le dataset Housing California de 1990.
