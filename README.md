@@ -53,6 +53,12 @@ Pour lancer l'app, vous devrez taper la commande :
 flask run
 ```
 
+# Estimer un prix médian
+Afin d'estimer un prix médian grâce à notre fonction ML, vous aurez besoin de rentrer les informations demandés après avoir taper la commande :
+```console
+flask predict-value
+```
+
 # Docker
 Si vous voulez vous éviter toutes les instructions précédentes, il est conseillé d'utiliser Docker.
 1. Il faut configurer les variables environnements de Postgres dans un fichier .env à placer à la racine de l'application (renommer le fichier `.env.exemple` en `.env` suffit amplement) :
