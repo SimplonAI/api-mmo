@@ -1,7 +1,6 @@
 from collections import UserString
 import click
 import pandas as pd
-from flask import current_app
 from flask.cli import with_appcontext
 from getpass import getpass
 from werkzeug.security import generate_password_hash
@@ -122,8 +121,8 @@ def predict_value():
         revenu_median = None
     # On prédit le prix
     r_score, y, rmse = regression(data, pd.DataFrame.from_dict(d_test), revenu_median, mp)
-    current_app.logger.info(f"R² : {r_score}")
+    print(f"R² : {r_score}")
     if rmse is not None:
-        current_app.logger.info(f"MSRE : +/- {rmse}")
+        print(f"MSRE : +/- {rmse}")
 
-    current_app.logger.info(f"Prix médian prédit : {y}")
+    print(f"Prix médian prédit : {y}")
