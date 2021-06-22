@@ -44,7 +44,7 @@ flask insert-db
 # Créer un utilisateur
 Afin d'utiliser l'app, vous allez devoir vous connecter avec un utilisateur. Pour le créer :
 ```console
-flask create-db
+flask create-user
 ```
 
 # Exécution
