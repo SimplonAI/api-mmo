@@ -6,8 +6,8 @@ import pytest
 import pandas as pd
 from flask import jsonify
 from app import create_app
-from app.database.db import db
-from app.database.models import House, User, UserRole, ModelParams
+from app.db import db
+from app.models import House, User, UserRole, ModelParams
 from app.db_commands import insert_db
 
 @pytest.fixture

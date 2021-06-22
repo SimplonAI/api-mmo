@@ -1,10 +1,11 @@
+from flask_login import UserMixin
 from dataclasses import dataclass
 from pandas.core.frame import DataFrame
-from app.database.db import db
+from app.db import db
 from sqlalchemy.sql import func
 
 @dataclass
-class House(db.Model):
+class House(UserMixin, db.Model):
     __tablename__ = "house"
     id = db.Column("ho_id", db.Integer, primary_key=True)
     longitude = db.Column("ho_longitude", db.Numeric(5, 2), nullable=False)

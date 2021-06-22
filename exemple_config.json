@@ -1,5 +1,5 @@
 {
-    "SECRET": "test",
+    "SECRET_KEY": "test",
     "DEFAULT_DB": "POSTGRES",
     "POSTGRES": {
         "connector": "postgresql",

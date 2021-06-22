@@ -3,9 +3,10 @@ from flask_migrate import Migrate
 import json
 import os
 
-from app.database.db import db
+from app.db import db
 from app.controllers import main_controller
 from app.db_commands import insert_db, create_user, predict_value
+from app.services import login_manager
 
 migrate = Migrate()
 
@@ -38,7 +39,7 @@ def create_app(test_config=None):
     db.init_app(app)
 
     # On importe les models afin que flask_migrate les connaisse
-    from app.database.models import User, House, UserRole, ModelParams
+    from app.models import User, House, UserRole, ModelParams
 
     # On initialise l'outil de migration
     migrate.init_app(app, db)
@@ -51,6 +52,9 @@ def create_app(test_config=None):
 
     # On ajoute la commande "flask predict-value" à l'application
     app.cli.add_command(predict_value)
+
+    # instancie le service de login qui va manager l'aspect login/logout/cookie/session
+    login_manager.init_app(app)
 
     # On enregistre les différents controllers pour les routes
     # On ajoute le controller pour les urls de haut niveau ("/", "/login", "/contact", ...)
