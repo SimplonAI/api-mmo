@@ -16,3 +16,9 @@ def login():
     """Controller pour la connexion de l'utilisateur
     """
     return render_template("login.html")
+
+@main_blueprint.route("/predict")
+def predict(): 
+    """Controller pour l'affichage de la prédiction
+    """
+    return render_template("predict.html")

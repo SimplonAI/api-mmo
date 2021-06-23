@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Prédiction{% endblock %}
+{% block body %}
+<form>
+    <div class="form-row mt-5">
+      <div class="form-group col-md-6">
+        <label for="inputLastname">Nom</label>
+        <input type="text" class="form-control" id="inputLastname" placeholder="Dupont">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputForename">Prénom</label>
+        <input type="text" class="form-control" id="inputForename" placeholder="Martin">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputEmail4">Email</label>
+        <input type="email" class="form-control" id="inputEmail4" placeholder=dupont.martin@xxx.com>
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputPhone">Téléphone</label>
+        <input type="tel" class="form-control" id="inputPhone">
+      </div>
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputAddress">Addresse</label>
+      <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="inputAddress2">Addresse 2</label>
+      <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
+    </div>
+    <div class="form-row">
+      <div class="form-group col-md-6">
+        <label for="inputCity">Ville</label>
+        <input type="text" class="form-control" id="inputCity" placeholder="Los Angeles">
+      </div>
+      <div class="form-group col-md-4">
+        <label for="inputState">État</label>
+        <input type="text" class="form-control"  id="inputState" placeholder="Californie">
+      </div>
+      <div class="form-group col-md-2">
+        <label for="inputZip">Code Postal</label>
+        <input type="text" class="form-control" id="inputZip">
+      </div>
+    </div>
+    <div class="row my-3">
+      <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+  </form>
+  {% endblock %}
+
+
+
