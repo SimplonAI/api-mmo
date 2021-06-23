@@ -9,7 +9,7 @@ main_blueprint = Blueprint('main', __name__, url_prefix="/")
 def index():
     """Controller pour le dashboard
     """
-    return "Hello World ! Agile"
+    return render_template("dashboard.html")
 
 @main_blueprint.route("/login", methods=["GET", "POST"])
 def login():
