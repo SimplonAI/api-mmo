@@ -2,11 +2,33 @@
 {% block title %}Dashboard{% endblock %}
 {% block content_title %}Dashboard{% endblock %}
 {% block content_body %}
-<div class="card shadow">
-    <div class="card-body">
-        <h3>Personnalisation</h3>
-        <div class=""></div>
+<div class="accordion" id="accordionFlushExample">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="flush-headingOne">
+            <button class="accordion-button collapsed fw-bold fs-5" type="button" data-bs-toggle="collapse"
+                data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
+                Personnalisation
+            </button>
+        </h2>
+        <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
+            data-bs-parent="#accordionFlushExample">
+            <div class="accordion-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="plotsSelect" class="form-label">Choisir les plots à afficher :</label>
+                        {{ dashboard_form.plots(class="form-select", size=5, id="plotsSelect") }}
+                    </div>
+                    <div class="mb-3">
+                        <button class="btn btn-primary">Personnaliser</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </div>
-{% endblock %}
+{% for plot in plots %}
+    <img src="{{ url_for('api.plot', name=plot) }}">
+{% endfor %}
 
+
+{% endblock %}
