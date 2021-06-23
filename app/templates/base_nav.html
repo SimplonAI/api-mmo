@@ -1,35 +1,55 @@
 {% extends "base.html" %}
 {% block body %}
-<div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px;">
-    <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
-      <img src="{{ url_for('static', filename='img/icons/ai-logo-32.png') }}" class="bi me-2" width="32" height="32">
-      <span class="fs-4">AI-Stimate</span>
-    </a>
-    <hr>
-    <ul class="nav nav-pills flex-column mb-auto">
-      <li>
-        <a href="{{ url_for('main.index') }}" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#speedometer2"></use></svg>
-          Dashboard
-        </a>
-      </li>
-      <li>
-        <a href="{{ url_for('main.index') }}" class="nav-link text-white">
-          <svg class="bi me-2" width="16" height="16"><use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#table"></use></svg>
-          Prédiction
-        </a>
-      </li>
-    </ul>
-    <hr>
-    <div class="dropdown">
-      <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-        <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
-        <strong>{{ current_user.email }}</strong>
-      </a>
-      <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser">
-        <li><a class="dropdown-item" href="{{ url_for('main.logout') }}">Se déconnecter</a></li>
-      </ul>
+<div class="container-fluid h-100">
+<div class="row h-100">
+    <div class="col-auto h-100 bg-dark text-white p-0">
+        <div class="d-flex flex-column p-3 h-100">
+            <a href="/" class="d-flex align-items-center justify-content-center mb-3 m-0 text-white text-decoration-none">
+                <img src="{{ url_for('static', filename='img/icons/ai-logo-32.png') }}" class="bi me-2" width="32"
+                    height="32">
+                <span class="d-none d-lg-inline fs-4">AI-Stimate</span>
+            </a>
+            <hr>
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li>
+                    <a href="{{ url_for('main.index') }}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16">
+                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#speedometer2">
+                            </use>
+                        </svg>
+                        <span class="d-none d-lg-inline">Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('main.index') }}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16">
+                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#table"></use>
+                        </svg>
+                        <span class="d-none d-lg-inline">Prédiction</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <div class="dropdown">
+                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                    id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="{{ current_user.get_avatar() }}" alt="" width="32" height="32"
+                        class="rounded-circle me-2">
+                    <span class="d-none d-lg-inline"><strong>{{ current_user.email }}</strong></span>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser">
+                    <li><a class="dropdown-item" href="{{ url_for('main.logout') }}">Se déconnecter</a></li>
+                </ul>
+            </div>
+        </div>
     </div>
-  </div>
+    <div class="col">
+        <div class="border-bottom border-3 m-2">
+            <h1>{% block content_title %}{% endblock %}</h1>
+        </div>
+        <div class="">{% block content_body %}{% endblock %}
+        </div>
+    </div>
+</div>
+</div>
 {% endblock %}
-
