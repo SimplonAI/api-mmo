@@ -1,54 +1,104 @@
 {% extends "base.html" %}
 {% block title %}Prédiction{% endblock %}
 {% block body %}
-<form>
-    <div class="form-row mt-5">
-      <div class="form-group col-md-6">
-        <label for="inputLastname">Nom</label>
-        <input type="text" class="form-control" id="inputLastname" placeholder="Dupont">
-      </div>
-      <div class="form-group col-md-6">
-        <label for="inputForename">Prénom</label>
-        <input type="text" class="form-control" id="inputForename" placeholder="Martin">
-      </div>
+<div class="col-6">
+<form class="row g-3 m-auto">
+    <div class="col-md-12">
+        <label for="inputAddress" class="form-label">Addresse</label>
+        <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
     </div>
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="inputEmail4">Email</label>
-        <input type="email" class="form-control" id="inputEmail4" placeholder=dupont.martin@xxx.com>
-      </div>
-      <div class="form-group col-md-6">
-        <label for="inputPhone">Téléphone</label>
-        <input type="tel" class="form-control" id="inputPhone">
-      </div>
+    <div class="col-md-12">
+        <label for="inputAddress2" class="form-label">Addresse 2</label>
+        <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
     </div>
-    <div class="form-group col-md-6">
-      <label for="inputAddress">Addresse</label>
-      <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
-    </div>
-    <div class="form-group col-md-6">
-      <label for="inputAddress2">Addresse 2</label>
-      <input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">
-    </div>
-    <div class="form-row">
-      <div class="form-group col-md-6">
-        <label for="inputCity">Ville</label>
+    <div class="col-md-6">
+        <label for="inputCity" class="form-label">Ville</label>
         <input type="text" class="form-control" id="inputCity" placeholder="Los Angeles">
-      </div>
-      <div class="form-group col-md-4">
-        <label for="inputState">État</label>
-        <input type="text" class="form-control"  id="inputState" placeholder="Californie">
-      </div>
-      <div class="form-group col-md-2">
-        <label for="inputZip">Code Postal</label>
-        <input type="text" class="form-control" id="inputZip">
-      </div>
     </div>
+    <div class="col-md-4">
+        <label for="inputState" class="form-label">État</label>
+        <input type="text" class="form-control"  id="inputState" placeholder="Californie">
+    </div>
+    <div class="col-md-2">
+        <label for="inputZip" class="form-label">Code Postal</label>
+        <input type="text" class="form-control" id="inputZip">
+    </div>
+    <div class="form-row mt-5">
+        <div class="form-group col-md-6">
+          <label for="inputLongitude">Longitude</label>
+          <input type="text" class="form-control" id="inputLongitude">
+        </div>
+        <div class="form-group col-md-6">
+          <label for="inputLatitude">Latitude</label>
+          <input type="text" class="form-control" id="inputLatitude">
+        </div>
+        <div class="form-group col-md-6">
+            <label for="inputMedianAge">Âge moyen du foyer</label>
+            <input type="text" class="form-control" id="inputMedianAge">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputRooms">Nombre de pièces</label>
+            <input type="text" class="form-control" id="inputRooms">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputBedrooms">Nombre de chambres</label>
+            <input type="text" class="form-control" id="inputBedooms">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputPopulation">Population</label>
+            <input type="text" class="form-control" id="inputPopulation">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputHouseholds">Nombre de personnes composant le foyer</label>
+            <input type="text" class="form-control" id="inputHouseholds">
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputIncome">Revenu médian</label>
+            <input type="text" class="form-control" id="inputIncome">
+          </div>
+          <div class="row col-md-6">
+            <legend class="col-form-label col-sm-2 pt-0">Proximité à l'océan</legend>
+            <div class="col-sm-10">
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios1" value="option1" checked>
+                <label class="form-check-label" for="gridRadios1">
+                  Inférieur à 1h
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios2" value="option2">
+                <label class="form-check-label" for="gridRadios2">
+                  Proche de l'océan
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios3" value="option3">
+                <label class="form-check-label" for="gridRadios3">
+                  Proche de la baie
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios4" value="option4">
+                <label class="form-check-label" for="gridRadios4">
+                  Sur une île
+                </label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="radio" name="gridRadios" id="gridRadios5" value="option5">
+                <label class="form-check-label" for="gridRadios5">
+                  À l'intérieur des terres
+                </label>
+              </div>
+            </div>
+          </div>
+      </div>
     <div class="row my-3">
       <button type="submit" class="btn btn-primary">Enregistrer</button>
     </div>
-  </form>
+</form>
+</div>
   {% endblock %}
+
 
 
 
