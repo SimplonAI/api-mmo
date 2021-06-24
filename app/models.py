@@ -23,6 +23,7 @@ class House(db.Model):
     median_house_value = db.Column("ho_median_house_value", db.Integer, nullable=False)
     ocean_proximity = db.Column("ho_ocean_proximity", db.String(10), nullable=False)
     created_date = db.Column("ho_created_date", db.DateTime, server_default=func.now(), nullable=False)
+    updated_date = db.Column("ho_updated_date", db.DateTime, server_default=func.now(), nullable=False)
 
     def insert_from_pd(data_housing: DataFrame):
         data_housing = data_housing.rename(

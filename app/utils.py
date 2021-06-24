@@ -57,7 +57,7 @@ def house_results_to_dataframe(data_housing: pd.DataFrame):
         pd.DataFrame: Un dataframe similaire au fichier csv
     """
     # On élimine les colonnes id et created_date du dataframe
-    data_housing.drop(columns=["ho_id", "ho_created_date"], inplace=True)
+    data_housing.drop(columns=["ho_id", "ho_created_date", "ho_updated_date"], inplace=True)
     # On renomme les colonnes
     data_housing = data_housing.rename(
         columns={
