@@ -1,4 +1,3 @@
-from re import I
 from flask import Blueprint, render_template, flash, redirect, request, url_for
 from flask_login import login_required, login_user
 from flask_login.utils import logout_user
