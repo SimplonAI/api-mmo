@@ -7,6 +7,8 @@ from urllib.parse import urlparse, urljoin
 from app.forms import LoginForm
 from app.models import User
 from app.forms import PredictForm
+from app.utils import prediction
+
 
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
@@ -52,9 +54,11 @@ def logout():
 def estimation(): 
     """Controller pour l'affichage de l'estimation
     """
+
     predict_form = PredictForm() 
     if predict_form.validate_on_submit(): 
-        return 'Le formulaire à été envoyé. '
+        y, r2_score = prediction(predict_form)
+        return 'votre r2_score est : {r2_score} et votre estimation est {y} '
 
     return render_template("predict.html", predict_form = predict_form)
 

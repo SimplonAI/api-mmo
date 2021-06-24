@@ -1,3 +1,4 @@
+from app.forms import PredictForm
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer
@@ -12,7 +13,8 @@ from sklearn.preprocessing import (
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_squared_error
 import numpy as np
-
+from app.models import ModelParams
+from app.db import db
 
 def format_data_housing(data_housing: pd.DataFrame):
     """Permet de formatter les champs du dataframe afin de les conformer au type de la BDD
@@ -75,6 +77,41 @@ def house_results_to_dataframe(data_housing: pd.DataFrame):
     )
     return data_housing
 
+def prediction(predict_form: PredictForm):
+    """Prédit la valeur médiane d'une maison
+    """
+    # On récupère les paramètres de modélisation actifs
+    mp = ModelParams.query.filter_by(active=True).first()
+    # Si aucun paramètres dans la BDD, on quitte la fonction
+    if mp is None:
+        return
+    
+    # On récupère toutes les maisons de la BDD via pandas
+    data = pd.read_sql("SELECT * FROM house", db.engine)
+    # On renomme les colonnes du dataframe pour correspondre à ceux du csv
+    data = house_results_to_dataframe(data)
+
+    # Variable nécessaire pour créer le menu de sélection
+    """ déplacé dans forms.py
+    """
+
+    # On demande les données nécessaire à la prédiction puis on les stock dans un dictionnaire
+    d_test = {
+                "longitude": "à récupérer depuis l'adresse",
+                "latitude": "à récupérer depuis l'adresse",
+                "housing_median_age": predict_form.median_age,
+                "total_rooms": predict_form.total_rooms,
+                "total_bedrooms": predict_form.total_bedrooms,
+                "population": predict_form.population,
+                "households": predict_form.households,
+                "median_income": predict_form.median_income,
+                "ocean_proximity": predict_form.ocean_proximity,
+            }
+    
+    # On prédit le prix
+    r_score, y, rmse = regression(data, pd.DataFrame.from_dict(d_test), None, mp)
+    
+    return y, r_score
 
 def regression(data, x_test, y_true=None, params=None):
     X = data.drop("median_house_value", axis=1)
