@@ -28,7 +28,11 @@
 </div>
 <plot-list plots="{{ ','.join(plots) }}" id="plot-list">
     {% for plot in plots %}
-        <img src="{{ url_for('api.plot', name=plot) }}">
+    <div class="card shadow col-lg-6 mb-3">
+        <div class="card-body">
+            <img src="{{ url_for('api.plot', name=plot) }}" class="card-img-top">
+        </div>
+    </div>
     {% endfor %}
 </plot-list>
 
@@ -62,8 +66,8 @@
             this.shadowRoot.innerHTML = `<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">`
             for (let plot of this.plots) {
                 const div = document.createElement("div")
-                div.classList.add("card", "shadow", "col-6")
-                div.innerHTML = `<div class="card-body mb-3 mx-3"><img class="card-img-top" src="/api/plot/${plot}"></div>`
+                div.classList.add("card", "shadow", "col-lg-6", "mb-3")
+                div.innerHTML = `<div class="card-body"><img class="card-img-top" src="/api/plot/${plot}"></div>`
                 this.shadowRoot.appendChild(div)
             }
         }

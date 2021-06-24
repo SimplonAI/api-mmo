@@ -1,4 +1,4 @@
-from app.plots import PlotManager, ScatterPlot
+from app.plots import GeoPlots, PlotManager, ScatterPlot
 from flask_login import LoginManager
 from app.models import User
 
@@ -16,5 +16,6 @@ login_manager.login_view = "main.login"
 
 plot_manager = PlotManager()
 plot_manager.add_plot(ScatterPlot("Prix Médian en fonction du revenu médian", "median_income", "median_house_value", "Revenue médian", "Prix médian", key="median_price_income"))
+plot_manager.add_plot(GeoPlots("Prix médian selon la longitude et la latitude", hue="median_house_value", key="long_lat_price_map"))
 
 plot_manager.defaults = ["median_price_income"]
