@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, BooleanField
+from wtforms import PasswordField, BooleanField, SelectMultipleField
 from wtforms.fields.html5 import EmailField
 from wtforms.validators import DataRequired
 
@@ -11,3 +11,8 @@ class LoginForm(FlaskForm):
     email = EmailField('Adresse e-mail', validators=[DataRequired()])
     password = PasswordField('Mot de passe', validators=[DataRequired()])
     remember_me = BooleanField('Se souvenir de moi')
+
+class DashboardForm(FlaskForm):
+    """Formulaire de personalisation du dashboard
+    """
+    plots = SelectMultipleField('Graphiques')

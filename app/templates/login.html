@@ -3,22 +3,21 @@
 {% block body %}
 <div class="container-lg text-center">
     <img src="/static/img/icons/ai-logo.png" alt="Logo de AI-Stimate" title="Logo de AI-Stimate" />
+    <h1>AI Stimate</h1>
 </div>
 <div class="container-lg mt-5">
     {% with messages = get_flashed_messages(category_filter=["error"]) %}
         {% if messages %}
         <div class="alert alert-danger" role="alert">
-            <ul class=flashes>
             {% for message in messages %}
-            <li>{{ message }}</li>
+            {{ message }}
             {% endfor %}
-            </ul>
         </div>
         {% endif %}
     {% endwith %}
-    <div class="card shadow col-md-6 m-auto">
+    <div class="card shadow col-lg-6 col-md-8 m-auto">
         <div class="card-body">
-            <h1 class="card-title">Connexion</h1>
+            <h1 class="card-title">Connexion à l'application</h1>
             <form method="POST">
                 <div class="form-floating mb-3">
                     {{ login_form.email(class="form-control is-invalid" if login_form.email.errors else "form-control", id="email", placeholder="name@exemple.com") }}
@@ -49,8 +48,8 @@
                     </label>
                   </div>
                 {{ login_form.csrf_token }}
-                <div class="row my-3">
-                    <button class="btn btn-primary">Se connecter</button>
+                <div class="col-md-6 col-12 my-3 text-center m-auto">
+                    <button class="w-100 btn btn-primary">Se connecter</button>
                 </div>
             </form>
         </div>
