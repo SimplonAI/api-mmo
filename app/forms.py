@@ -19,8 +19,8 @@ class LoginForm(FlaskForm):
 class PredictForm(FlaskForm): 
     """ Formulaire de prédiction
     """
-    addresse = StringField("Addresse", validators=[DataRequired()])
-    addresse2 = StringField("Addresse 2", validators=[DataRequired()])
+    adresse = StringField("Adresse", validators=[DataRequired()])
+    adresse2 = StringField("Adresse 2", validators=[DataRequired()])
     ville = StringField("Ville", validators=[DataRequired()])
     etat = StringField("État", validators=[DataRequired()])
     code_postal = IntegerField("Code Postal", validators=[DataRequired()])

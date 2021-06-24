@@ -5,14 +5,14 @@
 <div class="col-6">
 <form class="row g-3 m-auto" method="POST">
     <div class="col-md-12">
-        <label for="inputAddress" class="form-label">Addresse</label>
-        {{ predict_form.addresse(class="form-control", id="inputAddress", placeholder="1234 Main St") }}
+        <label for="inputAdress" class="form-label">Adresse</label>
+        {{ predict_form.adresse(class="form-control", id="inputAdress", placeholder="1234 Main St") }}
     </div>
     <div class="col-md-12">
-        <label for="inputAddress2" class="form-label">Addresse 2</label>
-        {{ predict_form.addresse2(class="form-control", id="inputAddress2", placeholder="Apartment, studio, or floor") }}
+        <label for="inputAdress2" class="form-label">Adresse 2</label>
+        {{ predict_form.adresse2(class="form-control", id="inputAdress2", placeholder="Apartment, studio, or floor") }}
     </div>
-    <div class="col-md-6">
+    <div class="col-md-5">
         <label for="inputCity" class="form-label">Ville</label>
         {{ predict_form.ville(class="form-control", id="inputCity", placeholder="Los Angeles") }}
     </div>
@@ -20,11 +20,11 @@
         <label for="inputState" class="form-label">État</label>
         {{ predict_form.etat(class="form-control", id="inputState", placeholder="Californie") }}
     </div>
-    <div class="col-md-2">
+    <div class="col-md-3">
         <label for="inputZip" class="form-label">Code Postal</label>
         {{ predict_form.code_postal(class="form-control", id="inputZip") }}
     </div>
-    <div class="form-row mt-5">
+    <div class="row g-2 m-auto mt-5">
         <div class="form-group col-md-6">
             <label for="inputMedianAge">Âge moyen du foyer</label>
             {{ predict_form.median_age(class="form-control", id="inputMedianAge") }}
@@ -50,8 +50,8 @@
               {{ predict_form.median_income(class="form-control", id="inputIncome") }}
           </div>
 
-          <div class="row col-md-6">
-              <p>Ocean proximity</p>
+          <div class="row g-2 m-auto mt-2">
+              <p>Proximité à l'océan</p>
             {% for radio in predict_form.ocean_proximity %}
                     <div class="form-check">
                         {{ radio(class="form-check-input") }}
