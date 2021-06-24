@@ -10,6 +10,7 @@ from app.db import db
 from app.utils import format_data_housing, house_results_to_dataframe, regression
 from app.models import House, User, UserRole, ModelParams
 
+from app.forms import ocean_proximity
 
 @click.command("insert-db")
 @with_appcontext
@@ -98,7 +99,8 @@ def predict_value():
     data = house_results_to_dataframe(data)
 
     # Variable nécessaire pour créer le menu de sélection
-    ocean_proximity = ["NEAR BAY", "<1H OCEAN", "INLAND", "NEAR OCEAN", "ISLAND"]
+    """ déplacé dans forms.py
+    """
 
     # On demande les données nécessaire à la prédiction puis on les stock dans un dictionnaire
     d_test = {

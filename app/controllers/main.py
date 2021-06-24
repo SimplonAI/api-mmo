@@ -6,6 +6,7 @@ from urllib.parse import urlparse, urljoin
 
 from app.forms import LoginForm
 from app.models import User
+from app.forms import PredictForm
 
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
@@ -21,12 +22,6 @@ def index():
     """Controller pour le dashboard
     """
     return "Hello World ! Agile"
-
-@main_blueprint.route("/predict")
-def predict(): 
-    """Controller pour l'affichage de la prédiction
-    """
-    return render_template("predict.html")
 
 @main_blueprint.route("/login", methods=["GET", "POST"])
 def login():
@@ -52,3 +47,15 @@ def logout():
     """
     logout_user()
     return redirect(url_for("main.login"))
+
+@main_blueprint.route("/estimation", methods =['GET',"POST"])
+def estimation(): 
+    """Controller pour l'affichage de l'estimation
+    """
+    predict_form = PredictForm() 
+    if predict_form.validate_on_submit(): 
+        return 'Le formulaire à été envoyé. '
+
+    return render_template("predict.html", predict_form = predict_form)
+
+
