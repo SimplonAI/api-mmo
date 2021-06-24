@@ -2,7 +2,7 @@
 {% block title %}Dashboard{% endblock %}
 {% block content_title %}Dashboard{% endblock %}
 {% block content_body %}
-<div class="accordion" id="accordionFlushExample">
+<div class="accordion mb-3" id="accordionFlushExample">
     <div class="accordion-item">
         <h2 class="accordion-header" id="flush-headingOne">
             <button class="accordion-button collapsed fw-bold fs-5" type="button" data-bs-toggle="collapse"
@@ -26,11 +26,11 @@
         </div>
     </div>
 </div>
-{% for plot in plots %}
-    <plot-list plots="{{ ','.join(plots) }}" id="plot-list">
+<plot-list plots="{{ ','.join(plots) }}" id="plot-list">
+    {% for plot in plots %}
         <img src="{{ url_for('api.plot', name=plot) }}">
-    </plot-list>
-{% endfor %}
+    {% endfor %}
+</plot-list>
 
 
 {% endblock %}
@@ -59,11 +59,12 @@
             }
         }
         reload() {
-            this.shadowRoot.innerHTML = ''
+            this.shadowRoot.innerHTML = `<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">`
             for (let plot of this.plots) {
-                const img = document.createElement('img')
-                img.src = `/api/plot/${plot}`
-                this.shadowRoot.appendChild(img)
+                const div = document.createElement("div")
+                div.classList.add("card", "shadow", "col-6")
+                div.innerHTML = `<div class="card-body mb-3 mx-3"><img class="card-img-top" src="/api/plot/${plot}"></div>`
+                this.shadowRoot.appendChild(div)
             }
         }
     }
@@ -75,4 +76,3 @@
     })
 </script>
 {% endblock %}
-
