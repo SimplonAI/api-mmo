@@ -28,6 +28,16 @@
                         <span class="d-none d-md-inline">Prédiction</span>
                     </a>
                 </li>
+                
+                <li class="nav-item">
+                    <a href="{{ url_for('main.list_houses') }}" class="nav-link text-white">
+                        <svg class="bi me-2" width="16" height="16">
+                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#card-list"></use>
+                        </svg>
+                        <span class="d-none d-md-inline">Liste logement</span>
+                    </a>
+                </li>
+
             </ul>
             <hr>
             <div class="dropdown">

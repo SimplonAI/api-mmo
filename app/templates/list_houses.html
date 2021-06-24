@@ -1,100 +1,100 @@
-<!doctype html>
-<html lang="en">
+{% extends "base_nav.html" %}
+{% block title %}Liste logement{% endblock %}
+{% block content_title %}Liste logement{% endblock %}
+{% block content_body %}
 
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Application qui prédit des prix de maison en Californie">
-    <meta name="author" content="Anthony, Mohammad, Wilfried et Yanice">
-    <title>{% block title %}Accueil{% endblock %} - AI-Stimate</title>
+<div class="row">
+    <div class="col-auto m-auto">
 
-    <!-- Bootstrap core CSS -->
-    <link href="/static/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+        <div class="row">
 
-    <!-- Favicons -->
-    <link rel="apple-touch-icon" href="/static/img/icons/ai-logo-180.png" sizes="180x180">
-    <link rel="icon" href="/static/img/icons/ai-logo-32.png" sizes="32x32" type="image/png">
-    <link rel="icon" href="/static/img/icons/ai-logo-16.png" sizes="16x16" type="image/png">
-    <link rel="manifest" href="/static/img/icons/manifest.webmanifest">
-    <link rel="icon" href="/static/img/icons/favicon.ico">
-    <meta name="theme-color" content="#9013fe">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{current_page-1}}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
 
-    <!-- Custom styles for this template -->
-    <link href="/static/css/styles.css" rel="stylesheet">
-</head>
+                    {%for page in range(current_page-1 if current_page > 1 else 1,current_page+2 if current_page < count_page else count_page+1)%}
 
-<body>
-    {% block body %}
+                    <li class="page-item"><a class="page-link" href="?p={{page}}">{{page}}</a></li>
 
-    <h1 style="text-align:center;">List houses</h1>
-    <div class="row">
-        <div class="col-6 m-auto">
-            <div class="row">
+                    {% endfor %}
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{current_page+1}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 
-                {%for house in list_housing %}
-                <a class="card col-12 text-decoration-none text-dark my-3 shadow" href="#">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-auto">
-                                <strong>id house :</strong> {{house.id}}
-                            </div>
-                            <div class="col-auto">
-                                <strong>ocean proximity :</strong> {{house.ocean_proximity}}
-                            </div>
-                            <div class="col-auto ms-auto">
-                                <button class="btn btn-primary" type="submit">UPDATE</button>
-                                <button class="btn btn-danger" type="submit">DELETE</button>
-                            </div>
-                            
-                           
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-6 m-auto">
+        <div class="row">
+
+            {%for house in list_housing %}
+            <a class="card col-12 text-decoration-none text-dark my-3 shadow" href="#">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-auto">
+                            <strong>id house :</strong> {{house.id}}
                         </div>
+                        <div class="col-auto">
+                            <strong>ocean proximity :</strong> {{house.ocean_proximity}}
+                        </div>
+                        <div class="col-auto ms-auto">
+                            <button class="btn btn-primary" type="submit">UPDATE</button>
+                            <button class="btn btn-danger" type="submit">DELETE</button>
+                        </div>
+
+
                     </div>
-                </a>
-                {% endfor %}
-            </div>
+                </div>
+            </a>
+            {% endfor %}
         </div>
     </div>
+</div>
 
 
-    <div class="row">
-        <div class="col-auto">
+<div class="row">
+    <div class="col-auto m-auto">
 
-            <div class="row">
+        <div class="row">
 
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item">
-                            <a class="page-link" href="?p={{current_page-1}}" aria-label="Previous">
-                                <span aria-hidden="true">&laquo;</span>
-                            </a>
-                        </li>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{current_page-1}}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
 
-                        {%for page in range(current_page-1 if current_page > 1 else 1,current_page+2 if current_page < count_page else count_page+1)%}
+                    {%for page in range(current_page-1 if current_page > 1 else 1,current_page+2 if current_page < count_page else count_page+1)%}
 
-                        <li class="page-item"><a class="page-link" href="?p={{page}}">{{page}}</a></li>
+                    <li class="page-item"><a class="page-link" href="?p={{page}}">{{page}}</a></li>
 
-                        {% endfor %}
-                        <li class="page-item">
-                            <a class="page-link" href="?p={{current_page+1}}" aria-label="Next">
-                                <span aria-hidden="true">&raquo;</span>
-                            </a>
-                        </li>
-                    </ul>
-                </nav>
+                    {% endfor %}
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{current_page+1}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
 
-            </div>
         </div>
     </div>
+</div>
 
 
 
 
 
-    {% endblock %}
-    <script src="/static/js/bootstrap.bundle.min.js" crossorigin="anonymous">
-    </script>
-    {% block scripts %}
-    {% endblock %}
-</body>
-
-</html>
+{% endblock %}
