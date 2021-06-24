@@ -3,6 +3,8 @@ from slugify import slugify
 
 import matplotlib.pyplot as plt
 import seaborn as sn
+import geopandas
+import contextily as cx
 
 class AbstractPlot(metaclass=ABCMeta):
     def __init__(self, name, x=None, y=None, x_label=None, y_label=None, key=None) -> None:
@@ -58,4 +60,24 @@ class ScatterPlot(AbstractPlot):
             ax.set_ylabel(self.y_label)
         fig.tight_layout()
 
+        return fig
+
+class GeoPlots(AbstractPlot):
+    def __init__(self, name, x=None, y=None, x_label=None, y_label=None, key=None, hue=None) -> None:
+        super().__init__(name, x=x, y=y, x_label=x_label, y_label=y_label, key=key)
+        self.hue = hue
+
+    def plot(self, data):
+        fig, ax = plt.subplots(1)
+        gdf = geopandas.GeoDataFrame(
+            data, geometry=geopandas.points_from_xy(data['longitude'], data['latitude']))
+        gdf.set_crs(epsg=4326, inplace=True)
+        gdf.plot(figsize=(15, 15), markersize = 20, column = self.hue, legend=True, marker = '.', alpha=0.5, ax=ax)
+        cx.add_basemap(ax,crs=gdf.crs.to_string(), source=cx.providers.OpenStreetMap.Mapnik)
+        ax.set_title(self.name)
+        if self.x_label is not None:
+            ax.set_xlabel(self.x_label)
+        if self.y_label is not None:
+            ax.set_ylabel(self.y_label)
+        fig.tight_layout()
         return fig
