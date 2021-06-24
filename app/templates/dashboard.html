@@ -13,7 +13,7 @@
         <div id="flush-collapseOne" class="accordion-collapse collapse" aria-labelledby="flush-headingOne"
             data-bs-parent="#accordionFlushExample">
             <div class="accordion-body">
-                <form method="POST">
+                <form method="POST" class="selection-form">
                     <div class="mb-3">
                         <label for="plotsSelect" class="form-label">Choisir les plots à afficher :</label>
                         {{ dashboard_form.plots(class="form-select", size=5, id="plotsSelect") }}
@@ -27,8 +27,52 @@
     </div>
 </div>
 {% for plot in plots %}
-    <img src="{{ url_for('api.plot', name=plot) }}">
+    <plot-list plots="{{ ','.join(plots) }}" id="plot-list">
+        <img src="{{ url_for('api.plot', name=plot) }}">
+    </plot-list>
 {% endfor %}
 
 
 {% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    class PlotList extends HTMLElement {
+        constructor(plots) {
+            super()
+            if (plots !== undefined)
+                this.plots = plots
+            this.attachShadow({ mode: "open" })
+            this.reload()
+        }
+        get plots() {
+            return this.getAttribute('plots').split(",")
+        }
+        set plots(plots) {
+            this.setAttribute('plots', plots.join(","))
+        }
+        static get observedAttributes() {
+            return ['plots']
+        }
+        attributeChangedCallback(name, oldValue, newValue) {
+            if (name == "plots" && oldValue !== newValue) {
+                this.reload()
+            }
+        }
+        reload() {
+            this.shadowRoot.innerHTML = ''
+            for (let plot of this.plots) {
+                const img = document.createElement('img')
+                img.src = `/api/plot/${plot}`
+                this.shadowRoot.appendChild(img)
+            }
+        }
+    }
+    customElements.define('plot-list', PlotList)
+    document.querySelector(".selection-form").addEventListener("submit", (e) => {
+        e.preventDefault()
+        const select = document.querySelector("#plotsSelect")
+        document.querySelector("#plot-list").setAttribute("plots", Array.from(select.selectedOptions).map((collection) => collection.value).join(","))
+    })
+</script>
+{% endblock %}
+

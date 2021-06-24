@@ -2,7 +2,7 @@
 {% block body %}
 <div class="container-fluid h-100">
 <div class="row h-100">
-    <nav id="sidebarMenu" class="col-auto col-md-3 col-lg-2 h-100 bg-dark text-white p-0 dashboard-menu">
+    <nav id="sidebarMenu" class="col-auto col-md-3 col-lg-2 h-100 bg-dark text-white p-0 dashboard-menu position-fixed">
         <div class="d-flex flex-column p-3 h-100">
             <a href="/" class="d-flex align-items-center justify-content-center mb-3 m-0 text-white text-decoration-none">
                 <img src="{{ url_for('static', filename='img/icons/ai-logo-32.png') }}" class="bi me-2" width="32"
@@ -43,7 +43,7 @@
             </div>
         </div>
     </nav>
-    <div class="col">
+    <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4">
         <div class="border-bottom border-3 m-2">
             <h1>{% block content_title %}{% endblock %}</h1>
         </div>
