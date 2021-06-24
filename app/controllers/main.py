@@ -4,8 +4,9 @@ from flask_login.utils import logout_user
 from werkzeug.security import check_password_hash
 from urllib.parse import urlparse, urljoin
 
-from app.forms import LoginForm
+from app.forms import DashboardForm, LoginForm
 from app.models import User
+from app.services import plot_manager
 
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
@@ -20,7 +21,15 @@ main_blueprint = Blueprint('main', __name__, url_prefix="/")
 def index():
     """Controller pour le dashboard
     """
-    return "Hello World ! Agile"
+    plots = plot_manager.defaults
+    dashboard_form = DashboardForm()
+    dashboard_form.plots.choices = plot_manager.available_plots
+    if request.method == "POST" and dashboard_form.validate_on_submit():
+            if dashboard_form.plots.data is not None and len(dashboard_form.plots.data) > 0:
+                plots = dashboard_form.plots.data
+    else:
+        dashboard_form.plots.data = plots
+    return render_template("dashboard.html", plots=plots, dashboard_form=dashboard_form)
 
 @main_blueprint.route("/login", methods=["GET", "POST"])
 def login():

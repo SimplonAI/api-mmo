@@ -1,6 +1,7 @@
 from flask_login import UserMixin
 from dataclasses import dataclass
 from pandas.core.frame import DataFrame
+import urllib, hashlib
 from app.db import db
 from sqlalchemy.sql import func
 
@@ -52,6 +53,11 @@ class User(UserMixin, db.Model):
     email = db.Column("u_email", db.String(60), nullable=False)
     password = db.Column("u_password", db.String(128), nullable=False)
     role_id = db.Column("u_role_id", db.ForeignKey("user_role.role_id"))
+
+    def get_avatar(self):
+        gravatar_url = "https://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower().encode('utf-8')).hexdigest() + "?"
+        gravatar_url += urllib.parse.urlencode({'s':"40"})
+        return gravatar_url
 
 @dataclass
 class UserRole(db.Model):
