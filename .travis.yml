@@ -14,7 +14,7 @@ before_install:
   - sudo apt-get install libgeos-dev
   - sudo apt-get install -y libgdal-dev libgdal1-dev
   - sudo apt-get install -y gdal-bin
-  - sudo apt-get install -y libv8-3.14-dev libprotobuf-dev protobuf-compiler libudunits2-dev libnetcdf-dev libjq-dev python-gdal
+  - sudo apt-get install -y libv8-3.14-dev libprotobuf-dev protobuf-compiler libudunits2-dev libnetcdf-dev python-gdal
   - pip install cython  
   - pip install cartopy
   - export CPLUS_INCLUDE_PATH=/usr/include/gdal
