@@ -5,8 +5,9 @@ from werkzeug.security import check_password_hash
 from urllib.parse import urlparse, urljoin
 import math
 from app.models import User, House
-from app.forms import DashboardForm, LoginForm
+from app.forms import DashboardForm, LoginForm, PredictForm
 from app.services import plot_manager
+from app.utils import prediction
 
 
 def is_safe_url(target):
@@ -62,6 +63,20 @@ def logout():
     """Controller pour déconnecter un utilisateur"""
     logout_user()
     return redirect(url_for("main.login"))
+
+@main_blueprint.route("/estimation", methods =['GET',"POST"])
+@login_required
+def estimation(): 
+    """Controller pour l'affichage de l'estimation
+    """
+
+    predict_form = PredictForm()
+    r_score, y = None, None
+    if predict_form.validate_on_submit(): 
+        r_score,y = prediction(predict_form)
+
+    return render_template("predict.html", predict_form = predict_form , r_score = r_score, y=y)
+
 
 
 @main_blueprint.route("/list_houses", methods=["GET", "POST"])

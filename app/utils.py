@@ -1,3 +1,4 @@
+from app.forms import PredictForm
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer
@@ -12,7 +13,10 @@ from sklearn.preprocessing import (
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_squared_error
 import numpy as np
-
+from app.models import ModelParams
+from app.db import db
+import requests
+import json
 
 def format_data_housing(data_housing: pd.DataFrame):
     """Permet de formatter les champs du dataframe afin de les conformer au type de la BDD
@@ -74,6 +78,58 @@ def house_results_to_dataframe(data_housing: pd.DataFrame):
         }
     )
     return data_housing
+
+def get_location(predict_form: PredictForm): 
+    parameters = {
+        "key": "yG86rBajhbKGAgq1HK2fze2LWUD4G5Hr",
+        "location": f"{predict_form.adresse.data}, {predict_form.ville.data}, {predict_form.etat.data} {predict_form.code_postal.data}"
+    }
+
+    response = requests.get("http://www.mapquestapi.com/geocoding/v1/address", params = parameters)
+    location = json.loads(response.text)["results"]
+    lat = location[0]['locations'][0]['latLng']['lat']
+    lng = location[0]['locations'][0]['latLng']['lng']
+    return lat, lng
+
+
+
+def prediction(predict_form: PredictForm):
+    """Prédit la valeur médiane d'une maison
+    """
+    # On récupère les paramètres de modélisation actifs
+    mp = ModelParams.query.filter_by(active=True).first()
+    # Si aucun paramètres dans la BDD, on quitte la fonction
+    if mp is None:
+        return
+    
+    # On récupère toutes les maisons de la BDD via pandas
+    data = pd.read_sql("SELECT * FROM house", db.engine)
+    # On renomme les colonnes du dataframe pour correspondre à ceux du csv
+    data = house_results_to_dataframe(data)
+
+    # Variable nécessaire pour créer le menu de sélection
+    """ déplacé dans forms.py
+    """
+    lat, lng = get_location(predict_form)
+
+    # On demande les données nécessaire à la prédiction puis on les stock dans un dictionnaire
+    d_test = {
+                "longitude": [lng],
+                "latitude": [lat],
+                "housing_median_age": [predict_form.median_age.data],
+                "total_rooms": [predict_form.total_rooms.data],
+                "total_bedrooms": [predict_form.total_bedrooms.data],
+                "population": [predict_form.population.data],
+                "households": [predict_form.households.data],
+                "median_income": [predict_form.median_income.data],
+                "ocean_proximity": [predict_form.ocean_proximity.data],
+            }
+    
+    # On prédit le prix
+    r_score, y, _ = regression(data, pd.DataFrame.from_dict(d_test), None, mp)
+    
+    return r_score, y
+
 
 
 def regression(data, x_test, y_true=None, params=None):
@@ -148,3 +204,6 @@ def regression(data, x_test, y_true=None, params=None):
         return r_score, y_pred, rmse
 
     return r_score, y_pred, None
+
+
+
