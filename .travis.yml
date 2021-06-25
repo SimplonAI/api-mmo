@@ -8,12 +8,16 @@ python:
   - "3.9"
 
 before_install:
+  - sudo add-apt-repository ppa:ubuntugis/ppa
+  - sudo apt-get update
   - sudo apt-get install libproj-dev proj-data proj-bin  
   - sudo apt-get install libgeos-dev
   - sudo apt-get install libgdal-dev
   - sudo apt-get install -y gdal-bin
   - pip install cython  
-  - pip install cartopy 
+  - pip install cartopy
+  - export CPLUS_INCLUDE_PATH=/usr/include/gdal
+  - export C_INCLUDE_PATH=/usr/include/gdal
 
 script:
   - python -m pytest -v
