@@ -15,6 +15,8 @@ from sklearn.metrics import mean_squared_error
 import numpy as np
 from app.models import ModelParams
 from app.db import db
+import requests
+import json
 
 def format_data_housing(data_housing: pd.DataFrame):
     """Permet de formatter les champs du dataframe afin de les conformer au type de la BDD
@@ -77,6 +79,20 @@ def house_results_to_dataframe(data_housing: pd.DataFrame):
     )
     return data_housing
 
+def get_location(predict_form: PredictForm): 
+    parameters = {
+        "key": "yG86rBajhbKGAgq1HK2fze2LWUD4G5Hr",
+        "location": f"{predict_form.adresse.data}, {predict_form.ville.data}, {predict_form.etat.data} {predict_form.code_postal.data}"
+    }
+
+    response = requests.get("http://www.mapquestapi.com/geocoding/v1/address", params = parameters)
+    location = json.loads(response.text)["results"]
+    lat = location[0]['locations'][0]['latLng']['lat']
+    lng = location[0]['locations'][0]['latLng']['lng']
+    return lat, lng
+
+
+
 def prediction(predict_form: PredictForm):
     """Prédit la valeur médiane d'une maison
     """
@@ -94,24 +110,27 @@ def prediction(predict_form: PredictForm):
     # Variable nécessaire pour créer le menu de sélection
     """ déplacé dans forms.py
     """
+    lat, lng = get_location(predict_form)
 
     # On demande les données nécessaire à la prédiction puis on les stock dans un dictionnaire
     d_test = {
-                "longitude": "à récupérer depuis l'adresse",
-                "latitude": "à récupérer depuis l'adresse",
-                "housing_median_age": predict_form.median_age,
-                "total_rooms": predict_form.total_rooms,
-                "total_bedrooms": predict_form.total_bedrooms,
-                "population": predict_form.population,
-                "households": predict_form.households,
-                "median_income": predict_form.median_income,
-                "ocean_proximity": predict_form.ocean_proximity,
+                "longitude": [lng],
+                "latitude": [lat],
+                "housing_median_age": [predict_form.median_age.data],
+                "total_rooms": [predict_form.total_rooms.data],
+                "total_bedrooms": [predict_form.total_bedrooms.data],
+                "population": [predict_form.population.data],
+                "households": [predict_form.households.data],
+                "median_income": [predict_form.median_income.data],
+                "ocean_proximity": [predict_form.ocean_proximity.data],
             }
     
     # On prédit le prix
-    r_score, y, rmse = regression(data, pd.DataFrame.from_dict(d_test), None, mp)
+    r_score, y, _ = regression(data, pd.DataFrame.from_dict(d_test), None, mp)
     
-    return y, r_score
+    return r_score, y
+
+
 
 def regression(data, x_test, y_true=None, params=None):
     X = data.drop("median_house_value", axis=1)
@@ -185,4 +204,6 @@ def regression(data, x_test, y_true=None, params=None):
         return r_score, y_pred, rmse
 
     return r_score, y_pred, None
+
+
 

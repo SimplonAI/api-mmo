@@ -57,9 +57,8 @@ def estimation():
 
     predict_form = PredictForm() 
     if predict_form.validate_on_submit(): 
-        y, r2_score = prediction(predict_form)
-        return 'votre r2_score est : {r2_score} et votre estimation est {y} '
+        r_score,y = prediction(predict_form)
 
-    return render_template("predict.html", predict_form = predict_form)
+    return render_template("predict.html", predict_form = predict_form , r_score = r_score, y=y)
 
 

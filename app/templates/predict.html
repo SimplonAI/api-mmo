@@ -2,6 +2,17 @@
 {% block title %}Prédiction{% endblock %}
 {% block body %}
 
+{% if y %}
+<div class="card text-center text-white bg-success">
+    <h5 class="card-header">AI-STIMATE</h5>
+    <div class="card-body">
+      <h5 class="card-title">Prédiction de votre bien immobilier avec notre modèle de machine learning</h5>
+      <p class="card-text"> L'estimation de votre bien est de {{"{0:0.2f}".format(y[0])}} $ avec une confiance à {{"{0:0.2f}".format(r_score*100)}} %.</p>
+    </div>
+  </div>
+{% endif %}
+
+
 <div class="col-6">
 <form class="row g-3 m-auto" method="POST">
     <div class="col-md-12">
@@ -66,6 +77,9 @@
     {{ predict_form.csrf_token }}
 </form>
 </div>
+
+
+
   {% endblock %}
 
 
