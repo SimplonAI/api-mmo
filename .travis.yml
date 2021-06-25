@@ -8,4 +8,8 @@ python:
   - "3.9"
 
 script:
+  - apt-get install libproj-dev proj-data proj-bin  
+  - apt-get install libgeos-dev  
+  - pip install cython  
+  - pip install cartopy 
   - python -m pytest -v
