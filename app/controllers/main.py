@@ -85,3 +85,12 @@ def list_houses():
         current_page=page,
         title="list_housing",
     )
+
+
+@main_blueprint.route("/add_house", methods=["GET", "POST"])
+@login_required
+def add_house():
+    """Controller pour afficher la liste des logements"""
+  
+    return render_template("add_house.html")
+

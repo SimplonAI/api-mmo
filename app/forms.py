@@ -16,3 +16,15 @@ class DashboardForm(FlaskForm):
     """Formulaire de personalisation du dashboard
     """
     plots = SelectMultipleField('Graphiques')
+
+
+class HouseForm(FlaskForm):
+    """Formulaire d'ajout de logement
+    """
+    email = EmailField('Adresse e-mail', validators=[DataRequired()])
+    password = PasswordField('Mot de passe', validators=[DataRequired()])
+    remember_me = BooleanField('Se souvenir de moi')
+
+    address = Field
+    housing_median_age = 
+

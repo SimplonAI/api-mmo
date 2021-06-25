@@ -54,8 +54,10 @@
         </div>
     </nav>
     <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4">
-        <div class="border-bottom border-3 m-2">
-            <h1>{% block content_title %}{% endblock %}</h1>
+        <div class="border-bottom border-3 m-2 row">
+            <h1 class="col-auto">{% block content_title %}{% endblock %}</h1>
+            {% block title_button_left %}{% endblock %}
+            
         </div>
         <div class="">{% block content_body %}{% endblock %}
         </div>

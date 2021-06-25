@@ -1,6 +1,13 @@
 {% extends "base_nav.html" %}
 {% block title %}Liste logement{% endblock %}
-{% block content_title %}Liste logement{% endblock %}
+{% block title_button_left %}<a href="{{ url_for('main.add_house') }}" type="button" class="col-auto ms-sm-auto btn btn-success">Ajouté un logement</a>
+{% endblock %}
+
+{% block content_title %}
+
+Liste logement
+{% endblock %}
+
 {% block content_body %}
 
 {% for message in get_flashed_messages(category_filter=["info"]) %}
