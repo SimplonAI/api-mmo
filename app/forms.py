@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, BooleanField, RadioField, StringField
+from wtforms import PasswordField, BooleanField, RadioField, StringField, SelectMultipleField
 from wtforms.fields.html5 import EmailField, IntegerField
 from wtforms.validators import DataRequired
 
@@ -31,3 +31,7 @@ class PredictForm(FlaskForm):
     households = IntegerField("Nombres de personnes composant le foyer", validators=[])
     median_income = IntegerField("Revenu médian", validators=[])
     ocean_proximity = RadioField("Proximité à l'océan", choices =ocean_proximity, validators=[])
+class DashboardForm(FlaskForm):
+    """Formulaire de personalisation du dashboard
+    """
+    plots = SelectMultipleField('Graphiques')
