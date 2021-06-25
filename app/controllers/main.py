@@ -65,11 +65,13 @@ def logout():
     return redirect(url_for("main.login"))
 
 @main_blueprint.route("/estimation", methods =['GET',"POST"])
+@login_required
 def estimation(): 
     """Controller pour l'affichage de l'estimation
     """
 
-    predict_form = PredictForm() 
+    predict_form = PredictForm()
+    r_score, y = None, None
     if predict_form.validate_on_submit(): 
         r_score,y = prediction(predict_form)
 

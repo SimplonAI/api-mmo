@@ -1,6 +1,7 @@
-{% extends "base.html" %}
+{% extends "base_nav.html" %}
 {% block title %}Prédiction{% endblock %}
-{% block body %}
+{% block content_title %}Prédiction{% endblock %}
+{% block content_body %}
 
 {% if y %}
 <div class="card text-center text-white bg-success">
@@ -13,7 +14,7 @@
 {% endif %}
 
 
-<div class="col-6">
+<div class="col-12">
 <form class="row g-3 m-auto" method="POST">
     <div class="col-md-12">
         <label for="inputAdress" class="form-label">Adresse</label>
