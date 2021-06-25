@@ -5,9 +5,9 @@ from werkzeug.security import check_password_hash
 from urllib.parse import urlparse, urljoin
 import math
 from app.models import User, House
-from app.forms import DashboardForm, LoginForm, PredictForm
+from app.forms import DashboardForm, LoginForm, PredictForm, HouseForm
 from app.services import plot_manager
-from app.utils import prediction
+from app.utils import prediction, get_location
 
 
 def is_safe_url(target):
@@ -105,7 +105,47 @@ def list_houses():
 @main_blueprint.route("/add_house", methods=["GET", "POST"])
 @login_required
 def add_house():
-    """Controller pour afficher la liste des logements"""
-  
-    return render_template("add_house.html")
+    """Controller pour ajouter un logements"""
+    
+
+    house_form = HouseForm()
+    lat, lng = get_location(house_form)
+    adresse 
+    adresse2
+    ville
+    etat 
+    code_postal
+    median_age 
+    total_rooms 
+    total_bedrooms 
+    population 
+    households 
+    median_income 
+    ocean_proximity
+
+    id
+    longitude 
+    latitude 
+    housing_median_age 
+    total_rooms 
+    total_bedrooms
+    population
+    households
+    median_income 
+    median_house_value 
+    ocean_proximity 
+    created_date 
+    median_income 
+    
+
+    insert_house = House(longitude=lng, latitude=lat, housing_median_age=median_age,total_rooms=total_rooms, total_bedrooms=total_bedrooms, population=population, households=households,median_income=median_income )
+    # On l'ajoute à la BDD
+    db.session.add(insert_user)
+    # On confirme les changements de la transaction
+    db.session.commit()
+        
+    return render_template("add_house.html", house_form = house_form)
+
+    #if house_form.validate_on_submit():
+    #    return render_template("add_house.html", house_form = house_form)
 

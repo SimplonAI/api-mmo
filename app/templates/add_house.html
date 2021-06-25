@@ -1,10 +1,81 @@
 {% extends "base_nav.html" %}
-{% block title %}Ajouté un logement{% endblock %}
+{% block title %}Ajouter un logement{% endblock %}
 
 {% block content_title %}
 
-Ajouté un logement
+Ajouter un logement
 {% endblock %}
 
 {% block content_body %}
+
+<div class="col-12">
+    <form class="row g-3 m-auto" method="POST">
+        <div class="col-md-12">
+            <label for="inputAdress" class="form-label">Adresse</label>
+            {{ house_form.adresse(class="form-control", id="inputAdress", placeholder="1234 Main St") }}
+        </div>
+        <div class="col-md-12">
+            <label for="inputAdress2" class="form-label">Adresse 2</label>
+            {{ house_form.adresse2(class="form-control", id="inputAdress2", placeholder="Apartment, studio, or floor") }}
+        </div>
+        <div class="col-md-5">
+            <label for="inputCity" class="form-label">Ville</label>
+            {{ house_form.ville(class="form-control", id="inputCity", placeholder="Los Angeles") }}
+        </div>
+        <div class="col-md-4">
+            <label for="inputState" class="form-label">État</label>
+            {{ house_form.etat(class="form-control", id="inputState", placeholder="Californie") }}
+        </div>
+        <div class="col-md-3">
+            <label for="inputZip" class="form-label">Code Postal</label>
+            {{ house_form.code_postal(class="form-control", id="inputZip") }}
+        </div>
+        <div class="row g-2 m-auto mt-5">
+            <div class="form-group col-md-6">
+                <label for="inputMedianAge">Âge moyen du foyer</label>
+                {{ house_form.median_age(class="form-control", id="inputMedianAge") }}
+              </div>
+              <div class="form-group col-md-6">
+                  <label for="inputRooms">Nombre de pièces</label>
+                  {{ house_form.total_rooms(class="form-control", id="inputRooms") }}
+              </div>
+              <div class="form-group col-md-6">
+                  <label for="inputBedrooms">Nombre de chambres</label>
+                  {{ house_form.total_bedrooms(class="form-control", id="inputBedrooms") }}
+              </div>
+              <div class="form-group col-md-6">
+                  <label for="inputPopulation">Population</label>
+                  {{ house_form.population(class="form-control", id="inputPopulation") }}
+              </div>
+              <div class="form-group col-md-6">
+                  <label for="inputHouseholds">Nombre de personnes composant le foyer</label>
+                  {{ house_form.households(class="form-control", id="inputHouseholds") }}
+              </div>
+              <div class="form-group col-md-6">
+                  <label for="inputIncome">Revenu médian des foyers pour votre bloc</label>
+                  {{ house_form.median_income(class="form-control", id="inputIncome") }}
+              </div>
+    
+              <div class="row g-2 m-auto mt-2">
+                  <p>Proximité à l'océan</p>
+                {% for radio in house_form.ocean_proximity %}
+                        <div class="form-check">
+                            {{ radio(class="form-check-input") }}
+                            {{ radio.label(class="form-check-label") }}
+                        </div>
+                {% endfor %}
+              </div>
+          </div>
+        <div class="row my-3">
+          <button type="submit" class="btn btn-primary">Ajouter le bien</button>
+        </div>
+        {{ house_form.csrf_token }}
+    </form>
+    </div>
+
+
+
+
+
+
 {% endblock %}
