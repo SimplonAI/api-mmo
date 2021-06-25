@@ -45,27 +45,24 @@
         <div class="row">
 
             {%for house in list_housing %}
-            <a class="card col-12 text-decoration-none text-dark my-3 shadow" href="#">
+            <div class="card col-12 my-3 shadow">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-auto">
-                            <strong>id house :</strong> {{house.id}}
-                        </div>
-                        <div class="col-auto">
+                        <a class="col-auto text-decoration-none text-dark" href="#">
+                            <strong>id house :</strong> {{house.id}}&nbsp;
                             <strong>ocean proximity :</strong> {{house.ocean_proximity}}
-                        </div>
-                        <div class="col-auto ms-auto">
-                            <a href="#" class="btn btn-primary" type="submit">UPDATE</a>
+                        </a>
 
+                        <div class="col-auto ms-auto">
+                            <button class="btn btn-primary" type="submit">UPDATE</button>
                             <a href="{{ url_for('api.delete_house', id=house.id) }}" class="btn btn-danger"
                                 onclick="if (!confirm('Voulez-vous vraiment supprimer le logement ?')) return false">DELETE</a>
-
                         </div>
 
 
                     </div>
                 </div>
-            </a>
+            </div>
             {% endfor %}
         </div>
     </div>
