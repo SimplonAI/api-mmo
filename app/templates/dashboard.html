@@ -26,9 +26,9 @@
         </div>
     </div>
 </div>
-<plot-list plots="{{ ','.join(plots) }}" id="plot-list">
+<plot-list plots="{{ ','.join(plots) }}" id="plot-list" class="row">
     {% for plot in plots %}
-    <div class="card shadow col-lg-6 mb-3">
+    <div class="card shadow col-lg-6 col-12 mb-3">
         <div class="card-body">
             <img src="{{ url_for('api.plot_img', name=plot) }}" class="card-img-top">
         </div>
@@ -98,7 +98,7 @@
             this.innerHTML = ''
             for (let plot of this.plots) {
                 const div = document.createElement("div")
-                div.classList.add("card", "shadow", "col-lg-6", "mb-3")
+                div.classList.add("card", "shadow", "col-lg-6", "col-12", "mb-3")
                 div.innerHTML = `<div class="card-body"><plot-graph name="${plot}"></div>`
                 this.appendChild(div)
             }

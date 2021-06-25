@@ -80,7 +80,13 @@ class ScatterPlot(AbstractPlot):
         sn.scatterplot(self.x, self.y, data=data, ax=ax)
 
     def make_plot_json(self, data):
-        d = [go.Scatter(x=data[self.x], y=data[self.y], mode="markers")]
+        d = {
+            "data": [go.Scatter(x=data[self.x], y=data[self.y], mode="markers")],
+            "layout": {
+                "title": self.name,
+                "margins": {"r": 0, "t": 0, "b": 0, "l": 0, "pad": 0},
+            },
+        }
         return json.dumps(d, cls=plotly.utils.PlotlyJSONEncoder)
 
 
@@ -173,6 +179,7 @@ class GeoPlots(AbstractPlot):
             default=convert,
         )
 
+
 class DistPlot(AbstractPlot):
     def __init__(
         self,
@@ -192,5 +199,11 @@ class DistPlot(AbstractPlot):
 
     def make_plot_json(self, data: pd.DataFrame):
         data2 = pd.cut(data[self.x], bins=self.bins).value_counts(sort=False)
-        d = [go.Bar(x=list(data2.index.astype(str)), y=list(data2))]
+        d = {
+            "data": [go.Bar(x=list(data2.index.astype(str)), y=list(data2))],
+            "layout": {
+                "title": self.name,
+                "margins": {"r": 0, "t": 0, "b": 0, "l": 0, "pad": 0},
+            },
+        }
         return json.dumps(d, cls=plotly.utils.PlotlyJSONEncoder)
