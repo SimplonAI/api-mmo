@@ -7,9 +7,11 @@ language: python
 python:
   - "3.9"
 
-script:
-  - apt-get install libproj-dev proj-data proj-bin  
-  - apt-get install libgeos-dev  
+before_install:
+  - sudo apt-get install libproj-dev proj-data proj-bin  
+  - sudo apt-get install libgeos-dev  
   - pip install cython  
   - pip install cartopy 
+
+script:
   - python -m pytest -v
