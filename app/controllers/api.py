@@ -3,7 +3,6 @@ from flask import (
     Blueprint,
     Response,
     abort,
-    abort,
     flash,
     redirect,
     render_template,
@@ -41,10 +40,9 @@ def delete_house(id):
     house = House.query.get_or_404(id)
     db.session.delete(house)
     db.session.commit()
-    flash("You have successfully deleted the house.", "info")
+    flash("Vous avez supprimé avec succès la maison !", "info")
 
-    # redirect to the departments page
+    # redirect to the list_house page
     return redirect(url_for("main.list_houses"))
 
 
-#    return render_template(title="Delete Department")
