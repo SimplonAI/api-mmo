@@ -1,9 +1,9 @@
 from io import BytesIO
-from flask import Blueprint, Response, abort, send_file
+from flask import Blueprint, Response, abort, send_file, current_app
 from flask.json import jsonify
 import pandas as pd
 from matplotlib.backends.backend_agg import FigureCanvasAgg
-import datetime
+from datetime import datetime
 import os
 import plotly
 import plotly.graph_objs as go
@@ -22,14 +22,16 @@ def plot_img(name):
     if name in plot_manager:
         last_house = House.query.order_by(House.updated_date.desc()).first()
         timestamp = datetime.timestamp(last_house.updated_date)
-        if os.path.isfile(f"/cache/{name}_{timestamp}.png"):
-            return send_file(f"/cache/{name}_{timestamp}.png", mimetype='image/png')
+        if not os.path.isdir(f"{current_app.instance_path}/cache"):
+            os.mkdir(f"{current_app.instance_path}/cache")
+        if os.path.isfile(f"{current_app.instance_path}/cache/{name}_{timestamp}.png"):
+            return send_file(f"{current_app.instance_path}/cache/{name}_{timestamp}.png", mimetype='image/png')
         houses = pd.read_sql("SELECT * FROM house", db.engine)
         houses = house_results_to_dataframe(houses)
         fig = plot_manager[name].plot(houses)
         png = BytesIO()
         FigureCanvasAgg(fig).print_png(png)
-        fig.savefig()
+        fig.savefig(f"{current_app.instance_path}/cache/{name}_{timestamp}.png")
         return Response(png.getvalue(), mimetype='image/png')
     abort(404)
 
@@ -43,5 +45,5 @@ def plot_json(name):
         houses = pd.read_sql("SELECT * FROM house", db.engine)
         houses = house_results_to_dataframe(houses)
 
-        return jsonify(plot_manager[name].make_plot_json(houses))
+        return Response(plot_manager[name].make_plot_json(houses), mimetype="application/json")
     abort(404)

@@ -30,7 +30,7 @@
     {% for plot in plots %}
     <div class="card shadow col-lg-6 mb-3">
         <div class="card-body">
-            <img src="{{ url_for('api.plot', name=plot) }}" class="card-img-top">
+            <img src="{{ url_for('api.plot_img', name=plot) }}" class="card-img-top">
         </div>
     </div>
     {% endfor %}
@@ -40,12 +40,44 @@
 {% endblock %}
 {% block scripts %}
 <script type="text/javascript">
+    Plotly.setPlotConfig({
+        mapboxAccessToken: "pk.eyJ1IjoiYWt1bWEwNiIsImEiOiJja3FiZW02YWEwamVpMnlxczVuYnl6aTR5In0.VJ5FbsxVmDHWTnHEG90vFA"
+    });
+    class PlotGraph extends HTMLElement {
+        constructor(plotName) {
+            super()
+            if (plotName !== undefined)
+                this.name = plotName
+            this.get_plot()
+        }
+
+        get name() {
+            return this.getAttribute('name')
+        }
+
+        set name(plotName) {
+            this.setAttribute('name', plotName)
+        }
+
+        static get observedAttributes() {
+            return ['name']
+        }
+
+        async get_plot() {
+            const result = await fetch(`/api/plot/json/${this.name}`)
+            if (result.status === 200) {
+                const json = await result.json()
+                this.plotJson = json
+                this.innerHTML = '<div class="plotly"></div>'
+                this.plotly = Plotly.newPlot(this.querySelector('.plotly'), this.plotJson.data !== undefined ? this.plotJson.data : this.plotJson, this.plotJson.layout ? this.plotJson.layout : {})
+            }
+        }
+    }
     class PlotList extends HTMLElement {
         constructor(plots) {
             super()
             if (plots !== undefined)
                 this.plots = plots
-            this.attachShadow({ mode: "open" })
             this.reload()
         }
         get plots() {
@@ -63,16 +95,17 @@
             }
         }
         reload() {
-            this.shadowRoot.innerHTML = `<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">`
+            this.innerHTML = ''
             for (let plot of this.plots) {
                 const div = document.createElement("div")
                 div.classList.add("card", "shadow", "col-lg-6", "mb-3")
-                div.innerHTML = `<div class="card-body"><img class="card-img-top" src="/api/plot/${plot}"></div>`
-                this.shadowRoot.appendChild(div)
+                div.innerHTML = `<div class="card-body"><plot-graph name="${plot}"></div>`
+                this.appendChild(div)
             }
         }
     }
     customElements.define('plot-list', PlotList)
+    customElements.define('plot-graph', PlotGraph)
     document.querySelector(".selection-form").addEventListener("submit", (e) => {
         e.preventDefault()
         const select = document.querySelector("#plotsSelect")
