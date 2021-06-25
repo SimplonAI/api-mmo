@@ -1,0 +1,39 @@
+{% extends "base_nav.html" %}
+{% block title %}Logement {{house_id}}{% endblock %}
+{% block content_body %}
+<h1>Logement {{HouseId}}</h1>
+<div>
+    <table>
+    <tr>
+        <td>Id </td>
+        <td>Longitude</td>
+        <td>Lattitude</td>
+        <td>age median</td>
+        <td>nombre de pièces</td>
+        <td>nombre de chambres</td>
+        <td>population</td> 
+        <td>households</td>
+        <td> salaire median</td>
+        <td>valeur moyenne de vente</td>
+        <td>proxmité de l'océan</td>
+        <td>creatd date</td>
+    </tr>
+
+    <tr>
+        <td>{{house_.id}} </td>
+        <td>{{house_.longitude}}</td>
+        <td>{{house_.latitude}}</td>
+        <td>{{house_.housing_median_age}}</td>
+        <td>{{house_.total_rooms}}</td>
+        <td>{{house_.total_bedrooms}}</td>
+        <td>{{house_.population}}</td> 
+        <td>{{house_.households}}</td>
+        <td>{{house_.households}}</td>
+        <td>{{house_.median_income}}</td>
+        <td>{{house_.ocean_proximity}}</td>
+        <td>{{house_.created_date}}</td>
+    </tr>
+    </table>
+</div> 
+{%endblock%}
+
