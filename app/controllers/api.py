@@ -1,23 +1,32 @@
 from io import BytesIO
-from flask import Blueprint, Response, abort, send_file, current_app
-from flask.json import jsonify
+from flask import (
+    Blueprint,
+    Response,
+    abort,
+    flash,
+    redirect,
+    url_for,
+    send_file,
+    current_app,
+)
+
+from flask_login import login_required
 import pandas as pd
 from matplotlib.backends.backend_agg import FigureCanvasAgg
 from datetime import datetime
 import os
-import plotly
-import plotly.graph_objs as go
-import json
 
-from app.forms import DashboardForm
 from app.services import plot_manager
 from app.db import db
 from app.models import House
 from app.utils import house_results_to_dataframe
+from app.models import House
 
-api_blueprint = Blueprint('api', __name__, url_prefix="/api")
+api_blueprint = Blueprint("api", __name__, url_prefix="/api")
+
 
 @api_blueprint.route("/plot/img/<name>", methods=["GET"])
+@login_required
 def plot_img(name):
     if name in plot_manager:
         last_house = House.query.order_by(House.updated_date.desc()).first()
@@ -36,6 +45,7 @@ def plot_img(name):
     abort(404)
 
 @api_blueprint.route("/plot/json/<name>", methods=["GET"])
+@login_required
 def plot_json(name):
     if name in plot_manager:
         last_house = House.query.order_by(House.updated_date.desc()).first()
@@ -47,3 +57,17 @@ def plot_json(name):
 
         return Response(plot_manager[name].make_plot_json(houses), mimetype="application/json")
     abort(404)
+
+
+@api_blueprint.route("/list_houses/delete/<int:id>", methods=["GET", "POST"])
+@login_required
+def delete_house(id):
+    house = House.query.get_or_404(id)
+    db.session.delete(house)
+    db.session.commit()
+    flash("Vous avez supprimé avec succès la maison !", "info")
+
+    # redirect to the list_house page
+    return redirect(url_for("main.list_houses"))
+
+
