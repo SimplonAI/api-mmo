@@ -195,10 +195,15 @@ class DistPlot(AbstractPlot):
         self.bins = bins
 
     def make_plot_img(self, data, ax):
-        sn.histplot(data, x=self.x, bins=self.bins, ax=ax)
-
+        if self.y is None:
+            sn.histplot(data, x=self.x, bins=self.bins, ax=ax)
+        else:
+            sn.histplot(data, x=self.x, ax=ax)
     def make_plot_json(self, data: pd.DataFrame):
-        data2 = pd.cut(data[self.x], bins=self.bins).value_counts(sort=False)
+        if self.y is None:
+            data2 = pd.cut(data[self.x], bins=self.bins).value_counts(sort=False)
+        else:
+            data2 = data[self.x].value_counts(sort=False)
         d = {
             "data": [go.Bar(x=list(data2.index.astype(str)), y=list(data2))],
             "layout": {

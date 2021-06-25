@@ -84,3 +84,5 @@ class ModelParams(db.Model):
     active = db.Column("mp_active", db.Boolean, default=False, nullable=False)
     created_date = db.Column("ho_created_date", db.DateTime, server_default=func.now(), nullable=False)
 
+    def to_hash(self):
+        return hash((int(self.max_iter), float(self.alpha), float(self.l1_ratio)))

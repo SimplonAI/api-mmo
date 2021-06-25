@@ -20,7 +20,9 @@ plot_manager.add_plot(GeoPlots("Prix médian selon la longitude et la latitude",
 plot_manager.add_plot(DistPlot("Distribution des revenus médians", "median_income", key="median_income_dist"))
 plot_manager.add_plot(DistPlot("Distribution des prix médians", "median_house_value", key="median_house_value_dist"))
 plot_manager.add_plot(DistPlot("Distribution de la population dans les block", "population", key="population_dist", bins=50))
+plot_manager.add_plot(DistPlot("Distribution de la proximité à l'océan", "ocean_proximity", "count", key="ocean_proximity_dist"))
+
 plot_manager.add_plot(ScatterPlot("Population en fonction du revenu médian", "median_income", "population", "Revenue médian", "Population", key="popu_income_scat"))
 plot_manager.add_plot(ScatterPlot("Nombre de pièces en fonction de la population", "population", "total_rooms", "Population", "Nombre de pièces", key="rooms_income_scat"))
 
-plot_manager.defaults = ["median_price_income", "long_lat_price_map", "median_income_dist", "median_house_value_dist", "population_dist"]
+plot_manager.defaults = ["median_price_income", "long_lat_price_map", "ocean_proximity_dist", "median_income_dist", "median_house_value_dist", "population_dist"]
