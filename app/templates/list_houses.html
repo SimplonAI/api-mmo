@@ -3,6 +3,12 @@
 {% block content_title %}Liste logement{% endblock %}
 {% block content_body %}
 
+{% for message in get_flashed_messages(category_filter=["info"]) %}
+<div class="alert alert-success" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+
 <div class="row">
     <div class="col-auto m-auto">
 
@@ -49,12 +55,11 @@
                             <strong>ocean proximity :</strong> {{house.ocean_proximity}}
                         </div>
                         <div class="col-auto ms-auto">
-                            <button class="btn btn-primary" type="submit">UPDATE</button>
+                            <a href="#" class="btn btn-primary" type="submit">UPDATE</a>
 
+                            <a href="{{ url_for('api.delete_house', id=house.id) }}" class="btn btn-danger"
+                                onclick="if (!confirm('Voulez-vous vraiment supprimer le logement ?')) return false">DELETE</a>
 
-                            <a href="{{ url_for('delete_house/', id=house.id) }}">
-                                <button class="btn btn-danger" type="submit">DELETE</button>
-                            </a>
                         </div>
 
 
