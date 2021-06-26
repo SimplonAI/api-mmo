@@ -129,7 +129,7 @@ def prediction(predict_form: PredictForm):
             }
     
     # On prédit le prix
-    r_score, y, _ = regression(data, pd.DataFrame.from_dict(d_test), None, mp)
+    r_score, y, _ = regression(data, pd.DataFrame.from_dict(d_test), mp)
     
     return r_score, y
 
