@@ -58,6 +58,9 @@ class User(UserMixin, db.Model):
         gravatar_url = "https://www.gravatar.com/avatar/" + hashlib.md5(self.email.lower().encode('utf-8')).hexdigest() + "?"
         gravatar_url += urllib.parse.urlencode({'s':"40"})
         return gravatar_url
+    
+    def has_permissions(self, perms: list[str]):
+        return all([perm in self.role.permissions for perm in perms])
 
 @dataclass
 class UserRole(db.Model):
