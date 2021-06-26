@@ -4,7 +4,7 @@ set -e
 echo "Waiting for Postgres (10 seconds)..."
 sleep 10
 
-flask db upgrade
-flask insert-db
+python3.9 -m flask db upgrade
+python3.9 -m flask insert-db
 
-python -m flask run
+python3.9 -m flask run
