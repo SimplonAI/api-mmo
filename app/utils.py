@@ -1,11 +1,11 @@
+from os import pipe
 from app.forms import PredictForm
 import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer
-from sklearn.ensemble import RandomForestRegressor
 from sklearn.impute import SimpleImputer
-from sklearn.linear_model import SGDRegressor, LinearRegression, Ridge
-from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.linear_model import SGDRegressor
+from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import (
     StandardScaler,
     OneHotEncoder,
@@ -13,6 +13,9 @@ from sklearn.preprocessing import (
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_squared_error
 import numpy as np
+
+from app.regression_model import RegressionModel
+
 from app.models import ModelParams
 from app.db import db
 import requests
@@ -61,7 +64,7 @@ def house_results_to_dataframe(data_housing: pd.DataFrame):
         pd.DataFrame: Un dataframe similaire au fichier csv
     """
     # On élimine les colonnes id et created_date du dataframe
-    data_housing.drop(columns=["ho_id", "ho_created_date"], inplace=True)
+    data_housing.drop(columns=["ho_id", "ho_created_date", "ho_updated_date"], inplace=True)
     # On renomme les colonnes
     data_housing = data_housing.rename(
         columns={
@@ -126,84 +129,23 @@ def prediction(predict_form: PredictForm):
             }
     
     # On prédit le prix
-    r_score, y, _ = regression(data, pd.DataFrame.from_dict(d_test), None, mp)
+    r_score, y, _ = regression(data, pd.DataFrame.from_dict(d_test), mp)
     
     return r_score, y
 
 
 
-def regression(data, x_test, y_true=None, params=None):
-    X = data.drop("median_house_value", axis=1)
-    housing_num = X.drop(["ocean_proximity"], axis=1)
+def regression(data, x_valid, params=None):
+    regression_model = RegressionModel(data, params)
 
-    col_names = "total_rooms", "total_bedrooms", "population", "households"
-    rooms_ix, bedrooms_ix, population_ix, households_ix = [
-        data.columns.get_loc(c) for c in col_names
-    ]
+    # Calcul du r score
+    r_score = regression_model.r_score(data)
 
-    class CombinedAttributesAdder(BaseEstimator, TransformerMixin):
-        def __init__(self, add_bedrooms_per_room=True):
-            self.add_bedrooms_per_room = add_bedrooms_per_room
-
-        def fit(self, X, y=None):
-            return self
-
-        def transform(self, X):
-            rooms_per_household = X[:, rooms_ix] / X[:, households_ix]
-            population_per_household = X[:, population_ix] / X[:, households_ix]
-            if self.add_bedrooms_per_room:
-                bedrooms_per_room = X[:, bedrooms_ix] / X[:, rooms_ix]
-                return np.c_[
-                    X, rooms_per_household, population_per_household, bedrooms_per_room
-                ]
-            else:
-                return np.c_[X, rooms_per_household, population_per_household]
-
-    num_pipeline = Pipeline(
-        [
-            ("imputer", SimpleImputer(strategy="most_frequent")),
-            ("attribs_adder", CombinedAttributesAdder()),
-            ("std_scaler", StandardScaler()),
-        ]
-    )
-
-    num_attribs = list(housing_num)
-    cat_attribs = ["ocean_proximity"]
-
-    full_pipeline = ColumnTransformer(
-        [
-            ("num", num_pipeline, num_attribs),
-            ("cat", OneHotEncoder(), cat_attribs),
-        ]
-    )
-
-    data_no_island = data[data["ocean_proximity"] != "ISLAND"]
-    X_noisland = data_no_island.drop("median_house_value", axis=1)
-    y_no_island = data_no_island["median_house_value"]
-
-    X_train_no_island, _, y_train_no_island, _ = train_test_split(
-        X_noisland, y_no_island, test_size=0.33, random_state=1
-    )
-
-    housing_prepared_no_island = full_pipeline.fit_transform(X_train_no_island)
-
-    sgd = SGDRegressor(
-        l1_ratio=params.l1_ratio,
-        alpha=params.alpha,
-        max_iter=params.max_iter,
-        penalty="elasticnet",
-    )
-    sgd.fit(housing_prepared_no_island, y_train_no_island)
-
-    r_score = sgd.score(housing_prepared_no_island, y_train_no_island)
-    housing_valid_no_island = full_pipeline.transform(x_test)
-    y_pred = sgd.predict(housing_valid_no_island)
+    # prédiction du prix
+    y_pred = regression_model.predict(data, x_valid)
     
-    if y_true is not None:
-        rmse = np.sqrt(mean_squared_error(y_true, y_pred))
-        return r_score, y_pred, rmse
+    return r_score, y_pred, regression_model.rmse(data)
 
-    return r_score, y_pred, None
-
-
-
+def convert(o):
+    if isinstance(o, np.generic): return o.item()  
+    raise TypeError

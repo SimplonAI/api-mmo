@@ -115,14 +115,8 @@ def predict_value():
                 "ocean_proximity": [ocean_proximity[SelectionMenu.get_selection(ocean_proximity, "Proximité vers l'océan ? ", show_exit_option=False)]],
             }
     
-    # On demande le prix réel de la maison s'il est connu
-    revenu_median = input("Prix médian réel ? (defaut : None)")
-    if revenu_median != "":
-        revenu_median = float(revenu_median)
-    else:
-        revenu_median = None
     # On prédit le prix
-    r_score, y, rmse = regression(data, pd.DataFrame.from_dict(d_test), revenu_median, mp)
+    r_score, y, rmse = regression(data, pd.DataFrame.from_dict(d_test), mp)
     print(f"R² : {r_score}")
     if rmse is not None:
         print(f"MSRE : +/- {rmse}")

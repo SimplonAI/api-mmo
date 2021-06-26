@@ -1,8 +1,25 @@
 {% extends "base.html" %}
 {% block body %}
+<nav class="navbar navbar-dark bg-dark d-md-none">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <img src="{{ url_for('static', filename='img/icons/ai-logo-32.png') }}" width="32" class="d-inline-block align-text-top">
+        AI Stimate
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            {% include "navigation.html" %}
+            <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('main.logout') }}">Se déconnecter</a></li>
+        </ul>
+        </div>
+    </div>
+  </nav>
 <div class="container-fluid h-100">
 <div class="row h-100">
-    <nav id="sidebarMenu" class="col-auto col-md-3 col-lg-2 h-100 bg-dark text-white p-0 dashboard-menu position-fixed">
+    <nav id="sidebarMenu" class="d-none d-md-block col-auto col-md-3 col-lg-2 h-100 bg-dark text-white p-0 dashboard-menu position-fixed">
         <div class="d-flex flex-column p-3 h-100">
             <a href="/" class="d-flex align-items-center justify-content-center mb-3 m-0 text-white text-decoration-none">
                 <img src="{{ url_for('static', filename='img/icons/ai-logo-32.png') }}" class="bi me-2" width="32"
@@ -11,33 +28,7 @@
             </a>
             <hr>
             <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="{{ url_for('main.index') }}" class="nav-link text-white">
-                        <svg class="bi me-2" width="16" height="16">
-                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#speedometer2">
-                            </use>
-                        </svg>
-                        <span class="d-none d-md-inline">Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('main.estimation') }}" class="nav-link text-white">
-                        <svg class="bi me-2" width="16" height="16">
-                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#table"></use>
-                        </svg>
-                        <span class="d-none d-md-inline">Prédiction</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a href="{{ url_for('main.list_houses') }}" class="nav-link text-white">
-                        <svg class="bi me-2" width="16" height="16">
-                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#card-list"></use>
-                        </svg>
-                        <span class="d-none d-md-inline">Liste logement</span>
-                    </a>
-                </li>
-
+                {% include "navigation.html" %}
             </ul>
             <hr>
             <div class="dropdown">
