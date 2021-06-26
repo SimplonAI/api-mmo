@@ -26,5 +26,6 @@ before_install:
 
 script:
   - python -m pytest -v
+  - cp .env.exemple .env
   - docker-compose up -d
   - docker-compose ps
