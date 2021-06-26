@@ -27,7 +27,7 @@ def create_app(test_config=None):
             dbconfig = app.config[app.config["DEFAULT_DB"]]
             app.config.from_mapping(
                 {
-                    "SQLALCHEMY_DATABASE_URI": f"{dbconfig['connector']}://{dbconfig['user']}:{dbconfig['password']}@{dbconfig['host']}:{dbconfig['port']}/{dbconfig['bdd']}",
+                    "SQLALCHEMY_DATABASE_URI": f"{dbconfig['connector']}://{dbconfig['user']}:{dbconfig['password']}@{dbconfig['host']}:{dbconfig['port']}/{dbconfig['bdd']},",
                     "SQLALCHEMY_TRACK_MODIFICATIONS": False,
                 }
             )

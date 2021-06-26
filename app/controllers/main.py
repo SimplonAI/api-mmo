@@ -8,6 +8,7 @@ from app.models import User, House
 from app.forms import DashboardForm, LoginForm, PredictForm, HouseForm
 from app.services import plot_manager
 from app.utils import prediction, get_location
+from app.db import db
 
 
 def is_safe_url(target):
@@ -110,37 +111,10 @@ def add_house():
 
     house_form = HouseForm()
     lat, lng = get_location(house_form)
-    adresse 
-    adresse2
-    ville
-    etat 
-    code_postal
-    median_age 
-    total_rooms 
-    total_bedrooms 
-    population 
-    households 
-    median_income 
-    ocean_proximity
-
-    id
-    longitude 
-    latitude 
-    housing_median_age 
-    total_rooms 
-    total_bedrooms
-    population
-    households
-    median_income 
-    median_house_value 
-    ocean_proximity 
-    created_date 
-    median_income 
-    
-
-    insert_house = House(longitude=lng, latitude=lat, housing_median_age=median_age,total_rooms=total_rooms, total_bedrooms=total_bedrooms, population=population, households=households,median_income=median_income )
+      
+    #insert_house = House(longitude=lng, latitude=lat, housing_median_age=median_age,total_rooms=total_rooms, total_bedrooms=total_bedrooms, population=population, households=households,median_income=median_income )
     # On l'ajoute à la BDD
-    db.session.add(insert_user)
+    #db.session.add(insert_house)
     # On confirme les changements de la transaction
     db.session.commit()
         
