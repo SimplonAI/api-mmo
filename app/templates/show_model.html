@@ -2,7 +2,7 @@
 {% block title %}Modèle de régression{% endblock %}
 {% block content_title %}Modèle de régression{% endblock %}
 {% block content_body %}
-<div class="card">
+<div class="card mb-3">
     <h5 class="card-header">Paramètres de la régression en cours</h5>
     <div class="card-body">
         <form method="POST" action="" id="model-form">
@@ -22,10 +22,20 @@
                     {{ form.max_iter(class="form-control") }}
                 </div>
             </div>
-            <div class="text-end">
+            <div class="text-end buttons">
                 <button class="btn btn-outline-primary">Tester</button>
             </div>
+            {{ form.csrf_token }}
         </form>
+    </div>
+</div>
+<div class="card mb-3 shadow">
+    <div class="card-body">
+        <plot-model id="reg-plot" alpha="{{ form.alpha.data }}" l1-ratio="{{ form.l1_ratio.data }}"
+            max-iter="{{ form.max_iter.data }}">
+            <img
+                src="{{ url_for('api.resid_plot') }}?alpha={{ form.alpha.data }}&l1_ratio={{ form.l1_ratio.data }}&max_iter={{ form.max_iter.data }}">
+        </plot-model>
     </div>
 </div>
 {% for message in get_flashed_messages(category_filter=["info"]) %}
@@ -38,26 +48,31 @@
     {{ error }}
 </div>
 {% endfor %}
-{% for param in all_params %}
-<param-item class="card{% if param.active %} bg-primary text-white{% endif %}" param-id="{{ param.id }}"
-    alpha="{{ param.alpha }}" l1-ratio="{{ param.l1_ratio }}" max-iter="{{ param.max_iter }}">
-    <div class="card-body">
-        <div class="row">
-            <div class="col">
-                <span class="align-middle"><strong>Alpha : </strong>{{ param.alpha }}
-                    <strong>L1 ratio : </strong>{{ param.l1_ratio }}
-                    <strong>Max Iter : </strong>{{ param.max_iter }}</span>
-            </div>
-            <div class="col-auto ms-sm-auto">
-                <a class="btn btn-danger delete" href="{{ url_for('api.delete_model', id=param.id) }}">
-                    <svg class="bi me-md-2" width="16" height="16">
-                        <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#trash"></use>
-                    </svg> <span class="d-none d-md-inline">Supprimer</span></a>
+<div class="param-items">
+    {% for param in all_params %}
+    <param-item class="card my-2{% if param.active %} bg-primary text-white{% endif %}" param-id="{{ param.id }}"
+        alpha="{{ param.alpha }}" l1-ratio="{{ param.l1_ratio }}" max-iter="{{ param.max_iter }}">
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <span class="align-middle"><strong>Alpha : </strong>{{ param.alpha }}
+                        <strong>L1 ratio : </strong>{{ param.l1_ratio }}
+                        <strong>Max Iter : </strong>{{ param.max_iter }}</span>
+                </div>
+                <div class="col-auto ms-sm-auto">
+                    <form class="delete" action="{{ url_for('api.delete_model', id=param.id) }}" method="POST">
+                    <button class="btn btn-danger">
+                        <svg class="bi me-md-2" width="16" height="16">
+                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#trash"></use>
+                        </svg> <span class="d-none d-md-inline">Supprimer</span></button>
+                        {{ form.csrf_token }}
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-</param-item>
-{% endfor %}
+    </param-item>
+    {% endfor %}
+</div>
 
 {% endblock %}
 {% block scripts %}
@@ -108,13 +123,15 @@
         }
 
         attachListeners() {
-            this.querySelector(".delete").addEventListener("click", function(e) {
+            this.querySelector(".delete").addEventListener("submit", (e) => {
                 e.preventDefault()
                 if (confirm("Voulez-vous vraiment supprimer les paramètres ?"))
-                    fetch(this.href, {
+                    fetch(e.target.action, {
                         headers: {
-                            "Content-Type": "application/json"
-                        }
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token() }}"
+                        },
+                        method: "DELETE"
                     }).then(response => {
                         return response.json()
                     }).then(result => {
@@ -125,6 +142,14 @@
                             } else Toast.show(result.error || 'Error')
                         }
                     })
+            })
+            this.querySelector(".set-param").addEventListener("click", (e) => {
+                e.preventDefault()
+                document.querySelector("#model-form input[name='alpha'").value = this.alpha
+                document.querySelector("#model-form input[name='alpha'").nextElementSibling.textContent = this.alpha
+                document.querySelector("#model-form input[name='l1_ratio'").value = this.l1Ratio
+                document.querySelector("#model-form input[name='l1_ratio'").nextElementSibling.textContent = this.l1Ratio
+                document.querySelector("#model-form input[name='max_iter'").value = this.maxIter
             })
         }
         reload() {
@@ -140,20 +165,123 @@
                         <strong>Max Iter : </strong><span class="max_iter">${this.maxIter}</span></span>
                     </div>
                     <div class="col-auto ms-sm-auto">
-                        <a class="btn btn-danger delete" href="/api/model/delete?id=${this.paramId}"><svg class="bi me-md-2" width="16" height="16">
-                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#trash"></use>
-                        </svg> <span class="d-none d-md-inline">Supprimer</span></a>
+                        <div class="d-flex flex-row">
+                        <button class="btn btn-outline-info set-param me-2">
+                            <svg class="bi" width="16" height="16">
+                                <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#box-arrow-in-up"></use>
+                            </svg>
+                        </button>
+                        <form class="delete" action="/api/model/delete?id=${this.paramId}" method="POST">
+                            <button class="btn btn-danger"><svg class="bi me-md-2" width="16" height="16">
+                                <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#trash"></use>
+                            </svg> <span class="d-none d-md-inline">Supprimer</span></button>
+                        </form>
+                    </div>
                     </div>
                 </div>
             </div>`
         }
     }
     customElements.define("param-item", ParamItem)
+    class PlotModel extends HTMLElement {
+        constructor() {
+            super()
+            this.get_plot()
+        }
+        get alpha() {
+            return this.hasAttribute('alpha') ? parseFloat(this.getAttribute('alpha')) : 0
+        }
+        set alpha(id) {
+            this.setAttribute("alpha", alpha.toString())
+        }
+
+        get l1Ratio() {
+            return this.hasAttribute('l1-ratio') ? parseFloat(this.getAttribute('l1-ratio')) : 0
+        }
+        set l1Ratio(id) {
+            this.setAttribute("l1-ratio", id.toString())
+        }
+
+        get maxIter() {
+            return this.hasAttribute('max-iter') ? parseInt(this.getAttribute('max-iter')) : 0
+        }
+        set maxIter(id) {
+            this.setAttribute("max-iter", id.toString())
+        }
+
+        static get observedAttributes() {
+            return ["max-iter", "alpha", "l1-ratio"]
+        }
+
+
+        attributeChangedCallback(name, oldValue, newValue) {
+            if (name == "max-iter" || name == "alpha" || name == "l1-ratio") {
+                this.get_plot()
+            }
+        }
+
+        async get_plot() {
+            const result = await fetch(
+                `/api/resid-plot?alpha=${this.alpha}&l1_ratio=${this.l1Ratio}&max_iter=${this.maxIter}&json`)
+            if (result.status === 200) {
+                const json = await result.json()
+                this.plotJson = json
+                this.innerHTML = '<div class="plotly"></div>'
+                this.plotly = Plotly.newPlot(this.querySelector('.plotly'), this.plotJson.data !== undefined ? this
+                    .plotJson.data : this.plotJson, this.plotJson.layout ? this.plotJson.layout : {})
+            }
+        }
+    }
+    customElements.define("plot-model", PlotModel)
     document.querySelector("#model-form input[name='alpha']").addEventListener("input", function (e) {
         this.nextElementSibling.textContent = this.value
     })
     document.querySelector("#model-form input[name='l1_ratio']").addEventListener("input", function (e) {
         this.nextElementSibling.textContent = this.value
     })
+    document.querySelector("#model-form").addEventListener("submit", (e) => {
+        e.preventDefault()
+        for (let [name, value] of new FormData(e.target)) {
+            document.getElementById("reg-plot").setAttribute(name.replace("_", "-"), value)
+        }
+    })
+    const add_button = document.createElement("button")
+    add_button.classList.add("btn", "btn-success")
+    add_button.textContent = "Ajouter"
+    add_button.addEventListener("click", (e) => {
+        e.preventDefault()
+        const data = Object.fromEntries((new FormData(document.querySelector("#model-form"))).entries())
+        fetch("{{ url_for('api.add_model') }}", {
+            body: JSON.stringify(data),
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token() }}"
+            },
+            method: "PUT"
+        }).then(response => {
+            return response.json()
+        }).then(result => {
+            if (result !== undefined) {
+                if (result.ok) {
+                    Toast.show(result.message)
+                    fetch("{{ url_for('api.list_model') }}", {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    }).then(response => {
+                        return response.json()
+                    }).then(result => {
+                        if (result.ok) {
+                            document.querySelector(".param-items").innerHTML = result.data.map(
+                                p =>
+                                `<param-item class="card my-2${p.active ? ' bg-primary text-white': ''}" param-id="${p.id}" alpha="${p.alpha}" l1-ratio="${p.l1_ratio}" max-iter="${p.max_iter}"></param-item>`
+                            ).join('\n')
+                        }
+                    })
+                } else Toast.show(result.error || 'Error')
+            }
+        })
+    })
+    document.querySelector("#model-form .buttons").appendChild(add_button)
 </script>
 {% endblock %}

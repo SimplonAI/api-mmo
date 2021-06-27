@@ -47,6 +47,22 @@ class RegressionModel():
     def model(self):
         return self.__saved_model.model
 
+    @property
+    def x_train(self):
+        return self.__saved_model.x_train
+    
+    @property
+    def y_train(self):
+        return self.__saved_model.y_train
+
+    @property
+    def x_test(self):
+        return self.__saved_model.x_test
+    
+    @property
+    def y_test(self):
+        return self.__saved_model.y_test
+
     def save_model(self):
         joblib.dump(self.__saved_model, self.save_path)
 
@@ -116,6 +132,11 @@ class RegressionModel():
         self.save_model()
 
     def retrain(self, data):
+        """Permet de réentraîner le même modèle sur un nouveau dataset
+
+        Args:
+            data (pd.DataFrame): DataFrame sur lequel entraîné de nouveau le modèle
+        """
         pipeline = self.get_pipeline(data)
 
         housing_prepared = pipeline.fit_transform(self.__saved_model.x_train)
@@ -131,6 +152,14 @@ class RegressionModel():
 
     
     def r_score(self, data):
+        """Le score R² pour le model entraîné
+
+        Args:
+            data (pd.DataFrame): DataFrame contenant toutes les données du modèle entraîné
+
+        Returns:
+            float: Le score R² calculé
+        """
         pipeline = self.get_pipeline(data)
 
         housing_test_no_island = pipeline.fit_transform(self.__saved_model.x_test)
@@ -138,13 +167,37 @@ class RegressionModel():
         return self.model.score(housing_test_no_island, self.__saved_model.y_test)
 
     def rmse(self, data):
+        """Retourne le root mean squared error du model entraîné
+
+        Args:
+            data (pd.DataFrame): Dataframe contenant toutes les valeurs du modèle entraîné
+
+        Returns:
+            float: Le root mean squared error calculé
+        """
         pipeline = self.get_pipeline(data)
 
         housing_test_no_island = pipeline.fit_transform(self.__saved_model.x_test)
         y_pred = self.model.predict(housing_test_no_island)
         return np.sqrt(mean_squared_error(self.__saved_model.y_test, y_pred))
 
+    def self_predict(self, data):
+        """Permet de retourner les valeurs prédites sur les données d'entraînements
+        """
+        pipeline = self.get_pipeline(data)
+        housing_value = pipeline.fit_transform(self.__saved_model.x_train)
+        return self.model.predict(housing_value)
+
     def predict(self, data, x_value):
+        """Permer de prédire des valeurs sur des données de tests ou de validation
+
+        Args:
+            data (pd.DataFrame): DataFrame contenant toutes les valeurs des données d'entraînements
+            x_value (pd.Series): Series contenant les valeurs à prédire
+
+        Returns:
+            list: Liste de valeurs prédites pour x_value
+        """
         pipeline = self.get_pipeline(data)
         pipeline.fit_transform(self.__saved_model.x_train)
         housing_value = pipeline.transform(x_value)

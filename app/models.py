@@ -1,12 +1,13 @@
 from flask_login import UserMixin
 from dataclasses import dataclass
 from pandas.core.frame import DataFrame
-import urllib, hashlib
-from app.db import db
 from sqlalchemy.sql import func
+import urllib, hashlib
+from sqlalchemy_serializer import SerializerMixin
+from app.db import db
 
 @dataclass
-class House(db.Model):
+class House(db.Model, SerializerMixin):
     """Table House de la BDD, il est possible de faire des requetes sql 
     avec House.query (voir la doc de flask-sqlalchemy)
     """
@@ -75,7 +76,7 @@ class UserRole(db.Model):
     users = db.relationship("User", backref="role")
 
 @dataclass
-class ModelParams(db.Model):
+class ModelParams(db.Model, SerializerMixin):
     """Table ModelParams de la BDD, il est possible de faire des requetes sql 
     avec ModelParams.query (voir la doc de flask-sqlalchemy)
     """

@@ -41,7 +41,7 @@ class DashboardForm(FlaskForm):
 
 
 class ModelParamsForm(FlaskForm):
-    alpha = DecimalRangeField("Alpha")
-    l1_ratio = DecimalRangeField("L1 Ratio")
+    alpha = DecimalRangeField("Alpha", places=5)
+    l1_ratio = DecimalRangeField("L1 Ratio", places=5)
     max_iter = IntegerField("Max Iter")
     active = BooleanField("Actif")
