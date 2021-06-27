@@ -73,15 +73,17 @@ def plot_json(name):
     abort(404)
 
 
-@api_blueprint.route("/list_houses/delete/<int:id>", methods=["POST", "DELETE"])
+@api_blueprint.route("/list_houses/delete/<int:id>", methods=["GET", "POST", "DELETE"])
 @login_required
 def delete_house(id):
-    house = House.query.get_or_404(id)
+    house = House.query.get(id)
+    if house is None:
+        return response_message_api("main.list_houses", error="La maison n'existe pas", ok=False)
     db.session.delete(house)
     db.session.commit()
 
     # redirect to the list_house page
-    return response_message_api("main.list_houses", message="Vous avez supprimé avec succès la maison !")
+    return response_message_api("main.list_houses", message="Vous avez supprimé avec succès la maison !", ok=True)
 
 @api_blueprint.route("/model/delete", methods=["POST", "DELETE"])
 @login_required
