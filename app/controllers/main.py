@@ -85,3 +85,19 @@ def list_houses():
         current_page=page,
         title="list_housing",
     )
+
+# ici on récupère l'ID de la maison , dont la vignette a été cliquée, via le chemin "/house/house_id"
+@main_blueprint.route("/house/<house_id>", methods=["GET"])
+@login_required
+def info_house(house_id):
+
+# renvoie une erreur 404 si aucune id de maison n'a été relevé dans la requête vers le serveur
+
+    House_=House.query.filter_by(id=house_id).first_or_404()
+    
+    return render_template("info_house.html",
+                           house_=House_,
+                            title="info_house" 
+                            )
+
+

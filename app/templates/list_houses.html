@@ -39,7 +39,7 @@
         <div class="row">
 
             {%for house in list_housing %}
-            <a class="card col-12 text-decoration-none text-dark my-3 shadow" href="#">
+            <a class="card col-12 text-decoration-none text-dark my-3 shadow" href="/house/{{house.id}}">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-auto">
@@ -51,6 +51,7 @@
                         <div class="col-auto ms-auto">
                             <button class="btn btn-primary" type="submit">UPDATE</button>
                             <button class="btn btn-danger" type="submit">DELETE</button>
+                            
                         </div>
 
 

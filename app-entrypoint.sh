@@ -1,4 +1,5 @@
 #!/bin/sh
+
 set -e
   
 echo "Waiting for Postgres (10 seconds)..."

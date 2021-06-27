@@ -10,3 +10,41 @@ html, body {
     white-space: nowrap;
     overflow: hidden;
 }
+
+.div_info{
+	margin:7px;
+}
+
+.retour_resultats{
+	position: absolute;
+    padding: 3px;
+    right: 10%;
+    margin: 10px;
+}
+
+table{ 
+	border-width:1px;
+	border-style:solid;
+	border-color:black;
+	table-layout:fixed;
+	width:100%;
+}
+
+td{
+	border-width:1px;
+	border-style:solid;
+	border-color:black;
+	text-align:center;
+	vertical-align:center;
+	width:50%;
+}
+
+th{
+	border-width:1.5px;
+	border-style:solid;
+	border-color:black;
+	text-align:center;
+	vertical-align:center;
+	width:50%;
+}
+
