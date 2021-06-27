@@ -2,6 +2,158 @@
 {% block title %}Modèle de régression{% endblock %}
 {% block content_title %}Modèle de régression{% endblock %}
 {% block content_body %}
-TEST
-{% endblock %}
+<div class="card">
+    <h5 class="card-header">Paramètres de la régression en cours</h5>
+    <div class="card-body">
+        <form method="POST" action="" id="model-form">
+            <div class="row mb-3">
+                {{ form.alpha.label(class="col-sm-2 col-form-label") }}
+                <div class="col-sm-2 text-center">
+                    {{ form.alpha(class="form-control", min=0, max=1, step=0.0001) }}
+                    <span class="input-value">{{ form.alpha.data }}</span>
+                </div>
+                {{ form.l1_ratio.label(class="col-sm-2 col-form-label") }}
+                <div class="col-sm-2 text-center">
+                    {{ form.l1_ratio(class="form-control", min=0, max=1, step=0.001) }}
+                    <span class="input-value">{{ form.l1_ratio.data }}</span>
+                </div>
+                {{ form.max_iter.label(class="col-sm-2 col-form-label") }}
+                <div class="col-sm-2">
+                    {{ form.max_iter(class="form-control") }}
+                </div>
+            </div>
+            <div class="text-end">
+                <button class="btn btn-outline-primary">Tester</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% for message in get_flashed_messages(category_filter=["info"]) %}
+<div class="alert alert-success" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+{% for error in get_flashed_messages(category_filter=["error"]) %}
+<div class="alert alert-danger" role="alert">
+    {{ error }}
+</div>
+{% endfor %}
+{% for param in all_params %}
+<param-item class="card{% if param.active %} bg-primary text-white{% endif %}" param-id="{{ param.id }}"
+    alpha="{{ param.alpha }}" l1-ratio="{{ param.l1_ratio }}" max-iter="{{ param.max_iter }}">
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <span class="align-middle"><strong>Alpha : </strong>{{ param.alpha }}
+                    <strong>L1 ratio : </strong>{{ param.l1_ratio }}
+                    <strong>Max Iter : </strong>{{ param.max_iter }}</span>
+            </div>
+            <div class="col-auto ms-sm-auto">
+                <a class="btn btn-danger delete" href="{{ url_for('api.delete_model', id=param.id) }}">
+                    <svg class="bi me-md-2" width="16" height="16">
+                        <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#trash"></use>
+                    </svg> <span class="d-none d-md-inline">Supprimer</span></a>
+            </div>
+        </div>
+    </div>
+</param-item>
+{% endfor %}
 
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    class ParamItem extends HTMLElement {
+        constructor() {
+            super()
+            this.reload()
+        }
+
+        get paramId() {
+            return this.hasAttribute('param-id') ? parseInt(this.getAttribute('param-id')) : 0
+        }
+        set paramId(id) {
+            this.setAttribute("param-id", id.toString())
+        }
+
+        get alpha() {
+            return this.hasAttribute('alpha') ? parseFloat(this.getAttribute('alpha')) : 0
+        }
+        set alpha(id) {
+            this.setAttribute("alpha", alpha.toString())
+        }
+
+        get l1Ratio() {
+            return this.hasAttribute('l1-ratio') ? parseFloat(this.getAttribute('l1-ratio')) : 0
+        }
+        set l1Ratio(id) {
+            this.setAttribute("l1-ratio", id.toString())
+        }
+
+        get maxIter() {
+            return this.hasAttribute('max-iter') ? parseInt(this.getAttribute('max-iter')) : 0
+        }
+        set maxIter(id) {
+            this.setAttribute("max-iter", id.toString())
+        }
+
+        static get observedAttributes() {
+            return ["param-id", "max-iter", "alpha", "l1-ratio"]
+        }
+
+
+        attributeChangedCallback(name, oldValue, newValue) {
+            if (name == "max-iter" || name == "alpha" || name == "l1-ratio") {
+                this.querySelector(`.data .${name.replace('-', '_')}`).textContent = newValue
+            }
+        }
+
+        attachListeners() {
+            this.querySelector(".delete").addEventListener("click", function(e) {
+                e.preventDefault()
+                if (confirm("Voulez-vous vraiment supprimer les paramètres ?"))
+                    fetch(this.href, {
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    }).then(response => {
+                        return response.json()
+                    }).then(result => {
+                        if (result !== undefined) {
+                            if (result.ok) {
+                                this.parentElement.removeChild(this)
+                                Toast.show(result.message)
+                            } else Toast.show(result.error || 'Error')
+                        }
+                    })
+            })
+        }
+        reload() {
+            this.innerHTML = this.build()
+            this.attachListeners()
+        }
+        build() {
+            return `<div class="card-body">
+                <div class="row">
+                    <div class="col data">
+                        <span class="align-middle"><strong>Alpha : </strong><span class="alpha">${this.alpha}</span>
+                        <strong>L1 ratio : </strong><span class="l1_ratio">${this.l1Ratio}</span>
+                        <strong>Max Iter : </strong><span class="max_iter">${this.maxIter}</span></span>
+                    </div>
+                    <div class="col-auto ms-sm-auto">
+                        <a class="btn btn-danger delete" href="/api/model/delete?id=${this.paramId}"><svg class="bi me-md-2" width="16" height="16">
+                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#trash"></use>
+                        </svg> <span class="d-none d-md-inline">Supprimer</span></a>
+                    </div>
+                </div>
+            </div>`
+        }
+    }
+    customElements.define("param-item", ParamItem)
+    document.querySelector("#model-form input[name='alpha']").addEventListener("input", function (e) {
+        this.nextElementSibling.textContent = this.value
+    })
+    document.querySelector("#model-form input[name='l1_ratio']").addEventListener("input", function (e) {
+        this.nextElementSibling.textContent = this.value
+    })
+</script>
+{% endblock %}
