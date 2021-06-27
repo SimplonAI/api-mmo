@@ -23,7 +23,9 @@
                 </div>
             </div>
             <div class="text-end buttons">
-                <button class="btn btn-outline-primary">Tester</button>
+                <button class="btn btn-outline-primary"><svg class="bi me-2" width="16" height="16">
+                    <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#clipboard-check"></use>
+                </svg>Tester</button>
             </div>
             {{ form.csrf_token }}
         </form>
@@ -247,7 +249,9 @@
     })
     const add_button = document.createElement("button")
     add_button.classList.add("btn", "btn-success")
-    add_button.textContent = "Ajouter"
+    add_button.innerHTML = `<svg class="bi me-2" width="16" height="16">
+        <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#plus-circle-dotted"></use>
+    </svg>Ajouter`
     add_button.addEventListener("click", (e) => {
         e.preventDefault()
         const data = Object.fromEntries((new FormData(document.querySelector("#model-form"))).entries())

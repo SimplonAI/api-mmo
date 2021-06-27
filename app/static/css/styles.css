@@ -14,3 +14,8 @@ html, body {
 .dashboard-menu {
     z-index: 3;
 }
+
+.bi {
+    display: inline-block;
+    vertical-align: -.125em;
+}
