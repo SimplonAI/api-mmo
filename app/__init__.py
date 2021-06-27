@@ -33,7 +33,7 @@ def create_app(test_config=None):
             )
     else:
         # Au cas où il n'existe pas, on avertit que celui-ci n'est pas présent
-        app.logger.warn("Aucun fichier config.json n'est présent dans le dossier /instance/. L'application risque de mal fonctionner !")
+        app.logger.warning("Aucun fichier config.json n'est présent dans le dossier /instance/. L'application risque de mal fonctionner !")
 
     # Si la variable d'environnement (défini via terminal ou dans le fichier .env à la racine du dossier) SQLALCHEMY_DATABASE_URI existe
     # On remplace la config de connexion à la base de données par cette variable environnment
