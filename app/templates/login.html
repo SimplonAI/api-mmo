@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Connexion{% endblock %}
+{% block body %}
+<div class="container-lg text-center">
+    <img src="/static/img/icons/ai-logo.png" alt="Logo de AI-Stimate" title="Logo de AI-Stimate" />
+    <h1>AI Stimate</h1>
+</div>
+<div class="container-lg mt-5">
+    {% with messages = get_flashed_messages(category_filter=["error"]) %}
+        {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+    <div class="card shadow col-lg-6 col-md-8 m-auto">
+        <div class="card-body">
+            <h1 class="card-title">Connexion à l'application</h1>
+            <form method="POST">
+                <div class="form-floating mb-3">
+                    {{ login_form.email(class="form-control is-invalid" if login_form.email.errors else "form-control", id="email", placeholder="name@exemple.com") }}
+                    <label for="email">Addresse e-mail</label>
+                    {% if login_form.email.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in login_form.email.errors %}
+                                {{ error|e }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="form-floating">
+                    {{ login_form.password(class="form-control is-invalid" if login_form.password.errors else "form-control", id="password", placeholder="Mot de passe") }}
+                    <label for="password">Mot de passe</label>
+                    {% if login_form.password.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in login_form.password.errors %}
+                                {{ error|e }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="form-check my-2">
+                    {{ login_form.remember_me(class="form-check-input", id="remember_me")}}
+                    <label class="form-check-label" for="remember_me">
+                      Se souvenir de moi
+                    </label>
+                  </div>
+                {{ login_form.csrf_token }}
+                <div class="col-md-6 col-12 my-3 text-center m-auto">
+                    <button class="w-100 btn btn-primary">Se connecter</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

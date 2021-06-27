@@ -1,0 +1,106 @@
+{% extends "base_nav.html" %}
+{% block title %}Liste logement{% endblock %}
+{% block content_title %}Liste logement{% endblock %}
+{% block content_body %}
+
+{% for message in get_flashed_messages(category_filter=["info"]) %}
+<div class="alert alert-success" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+
+<div class="row">
+    <div class="col-auto m-auto">
+
+        <div class="row">
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{current_page-1}}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    {%for page in range(current_page-1 if current_page > 1 else 1,current_page+2 if current_page < count_page else count_page+1)%}
+
+                    <li class="page-item"><a class="page-link" href="?p={{page}}">{{page}}</a></li>
+
+                    {% endfor %}
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{current_page+1}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-6 m-auto">
+        <div class="row">
+
+            {%for house in list_housing %}
+            <div class="card col-12 my-3 shadow">
+                <div class="card-body">
+                    <div class="row">
+                        <a class="col-auto text-decoration-none text-dark" href="#">
+                            <strong>id house :</strong> {{house.id}}&nbsp;
+                            <strong>ocean proximity :</strong> {{house.ocean_proximity}}
+                        </a>
+
+                        <div class="col-auto ms-auto">
+                            <button class="btn btn-primary" type="submit">UPDATE</button>
+                            <a href="{{ url_for('api.delete_house', id=house.id) }}" class="btn btn-danger"
+                                onclick="if (!confirm('Voulez-vous vraiment supprimer le logement ?')) return false">DELETE</a>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-auto m-auto">
+
+        <div class="row">
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{current_page-1}}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    {%for page in range(current_page-1 if current_page > 1 else 1,current_page+2 if current_page < count_page else count_page+1)%}
+
+                    <li class="page-item"><a class="page-link" href="?p={{page}}">{{page}}</a></li>
+
+                    {% endfor %}
+                    <li class="page-item">
+                        <a class="page-link" href="?p={{current_page+1}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+{% endblock %}

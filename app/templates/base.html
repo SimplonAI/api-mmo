@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Application qui prédit des prix de maison en Californie">
+  <meta name="author" content="Anthony, Mohammad, Wilfried et Yanice">
+  <title>{% block title %}Accueil{% endblock %} - AI-Stimate</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+
+  <!-- Favicons -->
+  <link rel="apple-touch-icon" href="/static/img/icons/ai-logo-180.png" sizes="180x180">
+  <link rel="icon" href="/static/img/icons/ai-logo-32.png" sizes="32x32" type="image/png">
+  <link rel="icon" href="/static/img/icons/ai-logo-16.png" sizes="16x16" type="image/png">
+  <link rel="manifest" href="/static/img/icons/manifest.webmanifest">
+  <link rel="icon" href="/static/img/icons/favicon.ico">
+  <meta name="theme-color" content="#9013fe">
+
+  <!-- Custom styles for this template -->
+  <link href="/static/css/styles.css" rel="stylesheet">
+  <script src="https://cdn.plot.ly/plotly-2.1.0.min.js"></script>
+</head>
+
+<body>
+  {% block body %}{% endblock %}
+  <script src="/static/js/bootstrap.bundle.min.js" crossorigin="anonymous">
+  </script>
+  {% block scripts %}{% endblock %}
+</body>
+
+</html>
