@@ -5,9 +5,14 @@ from werkzeug.security import check_password_hash
 from urllib.parse import urlparse, urljoin
 import math
 from app.models import User, House
+<<<<<<< HEAD
 from app.forms import DashboardForm, LoginForm, PredictForm
 from app.services import plot_manager
 from app.utils import prediction
+=======
+from app.forms import DashboardForm, LoginForm
+from app.services import plot_manager
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
 
 
 def is_safe_url(target):
@@ -64,6 +69,7 @@ def logout():
     logout_user()
     return redirect(url_for("main.login"))
 
+<<<<<<< HEAD
 @main_blueprint.route("/estimation", methods =['GET',"POST"])
 @login_required
 def estimation(): 
@@ -78,6 +84,8 @@ def estimation():
     return render_template("predict.html", predict_form = predict_form , r_score = r_score, y=y)
 
 
+=======
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
 
 @main_blueprint.route("/list_houses", methods=["GET", "POST"])
 @login_required
@@ -100,3 +108,22 @@ def list_houses():
         current_page=page,
         title="list_housing",
     )
+<<<<<<< HEAD
+=======
+
+# ici on récupère l'ID de la maison , dont la vignette a été cliquée, via le chemin "/house/house_id"
+@main_blueprint.route("/house/<house_id>", methods=["GET"])
+@login_required
+def info_house(house_id):
+
+# renvoie une erreur 404 si aucune id de maison n'a été relevé dans la requête vers le serveur
+
+    House_=House.query.filter_by(id=house_id).first_or_404()
+    
+    return render_template("info_house.html",
+                           house_=House_,
+                            title="info_house" 
+                            )
+
+
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def

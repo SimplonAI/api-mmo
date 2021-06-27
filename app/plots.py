@@ -1,4 +1,5 @@
 from abc import ABCMeta, abstractmethod
+<<<<<<< HEAD
 from app.utils import convert
 import json
 
@@ -16,6 +17,15 @@ class AbstractPlot(metaclass=ABCMeta):
     def __init__(
         self, name, x=None, y=None, x_label=None, y_label=None, key=None
     ) -> None:
+=======
+from slugify import slugify
+
+import matplotlib.pyplot as plt
+import seaborn as sn
+
+class AbstractPlot(metaclass=ABCMeta):
+    def __init__(self, name, x=None, y=None, x_label=None, y_label=None, key=None) -> None:
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
         self.name = name
         self.x = x
         self.y = y
@@ -28,6 +38,7 @@ class AbstractPlot(metaclass=ABCMeta):
         return slugify(self.name) if self.__key is None else self.__key
 
     @abstractmethod
+<<<<<<< HEAD
     def make_plot_img(self, data, ax):
         pass
 
@@ -48,16 +59,27 @@ class AbstractPlot(metaclass=ABCMeta):
 
         return fig
 
+=======
+    def plot(self, data):
+        pass
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
 
 class PlotManager(dict[str, AbstractPlot]):
     def __setitem__(self, k: str, v: AbstractPlot) -> None:
         if not isinstance(v, AbstractPlot):
             raise ValueError("Plot is not an abstractplot child class")
         return super().__setitem__(k, v)
+<<<<<<< HEAD
 
     def add_plot(self, plot: AbstractPlot):
         self[plot.slug] = plot
 
+=======
+    
+    def add_plot(self, plot: AbstractPlot):
+        self[plot.slug] = plot
+    
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
     @property
     def defaults(self):
         return self.__defaults or []
@@ -69,11 +91,16 @@ class PlotManager(dict[str, AbstractPlot]):
             if default not in self:
                 raise ValueError(f"Le plot {default} n'existe pas")
             self.__defaults.append(default)
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
     @property
     def available_plots(self):
         return [(self[plot].slug, self[plot].name) for plot in self]
 
+<<<<<<< HEAD
 
 class ScatterPlot(AbstractPlot):
     def make_plot_img(self, data, ax):
@@ -212,3 +239,18 @@ class DistPlot(AbstractPlot):
             },
         }
         return json.dumps(d, cls=plotly.utils.PlotlyJSONEncoder)
+=======
+class ScatterPlot(AbstractPlot):
+    def plot(self, data):
+        fig, ax = plt.subplots(1)
+        sn.scatterplot(self.x, self.y, data=data, ax=ax)
+        
+        ax.set_title(self.name)
+        if self.x_label is not None:
+            ax.set_xlabel(self.x_label)
+        if self.y_label is not None:
+            ax.set_ylabel(self.y_label)
+        fig.tight_layout()
+
+        return fig
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def

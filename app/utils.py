@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from os import pipe
 from app.forms import PredictForm
 import pandas as pd
@@ -6,6 +7,15 @@ from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import SGDRegressor
 from sklearn.model_selection import train_test_split
+=======
+import pandas as pd
+from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.impute import SimpleImputer
+from sklearn.linear_model import SGDRegressor, LinearRegression, Ridge
+from sklearn.model_selection import train_test_split, cross_val_score
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
 from sklearn.preprocessing import (
     StandardScaler,
     OneHotEncoder,
@@ -14,12 +24,15 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_squared_error
 import numpy as np
 
+<<<<<<< HEAD
 from app.regression_model import RegressionModel
 
 from app.models import ModelParams
 from app.db import db
 import requests
 import json
+=======
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
 
 def format_data_housing(data_housing: pd.DataFrame):
     """Permet de formatter les champs du dataframe afin de les conformer au type de la BDD
@@ -64,7 +77,11 @@ def house_results_to_dataframe(data_housing: pd.DataFrame):
         pd.DataFrame: Un dataframe similaire au fichier csv
     """
     # On élimine les colonnes id et created_date du dataframe
+<<<<<<< HEAD
     data_housing.drop(columns=["ho_id", "ho_created_date", "ho_updated_date"], inplace=True)
+=======
+    data_housing.drop(columns=["ho_id", "ho_created_date"], inplace=True)
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
     # On renomme les colonnes
     data_housing = data_housing.rename(
         columns={
@@ -82,6 +99,7 @@ def house_results_to_dataframe(data_housing: pd.DataFrame):
     )
     return data_housing
 
+<<<<<<< HEAD
 def get_location(predict_form: PredictForm): 
     parameters = {
         "key": "yG86rBajhbKGAgq1HK2fze2LWUD4G5Hr",
@@ -149,3 +167,78 @@ def regression(data, x_valid, params=None):
 def convert(o):
     if isinstance(o, np.generic): return o.item()  
     raise TypeError
+=======
+
+def regression(data, x_test, y_true=None, params=None):
+    X = data.drop("median_house_value", axis=1)
+    housing_num = X.drop(["ocean_proximity"], axis=1)
+
+    col_names = "total_rooms", "total_bedrooms", "population", "households"
+    rooms_ix, bedrooms_ix, population_ix, households_ix = [
+        data.columns.get_loc(c) for c in col_names
+    ]
+
+    class CombinedAttributesAdder(BaseEstimator, TransformerMixin):
+        def __init__(self, add_bedrooms_per_room=True):
+            self.add_bedrooms_per_room = add_bedrooms_per_room
+
+        def fit(self, X, y=None):
+            return self
+
+        def transform(self, X):
+            rooms_per_household = X[:, rooms_ix] / X[:, households_ix]
+            population_per_household = X[:, population_ix] / X[:, households_ix]
+            if self.add_bedrooms_per_room:
+                bedrooms_per_room = X[:, bedrooms_ix] / X[:, rooms_ix]
+                return np.c_[
+                    X, rooms_per_household, population_per_household, bedrooms_per_room
+                ]
+            else:
+                return np.c_[X, rooms_per_household, population_per_household]
+
+    num_pipeline = Pipeline(
+        [
+            ("imputer", SimpleImputer(strategy="most_frequent")),
+            ("attribs_adder", CombinedAttributesAdder()),
+            ("std_scaler", StandardScaler()),
+        ]
+    )
+
+    num_attribs = list(housing_num)
+    cat_attribs = ["ocean_proximity"]
+
+    full_pipeline = ColumnTransformer(
+        [
+            ("num", num_pipeline, num_attribs),
+            ("cat", OneHotEncoder(), cat_attribs),
+        ]
+    )
+
+    data_no_island = data[data["ocean_proximity"] != "ISLAND"]
+    X_noisland = data_no_island.drop("median_house_value", axis=1)
+    y_no_island = data_no_island["median_house_value"]
+
+    X_train_no_island, _, y_train_no_island, _ = train_test_split(
+        X_noisland, y_no_island, test_size=0.33, random_state=1
+    )
+
+    housing_prepared_no_island = full_pipeline.fit_transform(X_train_no_island)
+
+    sgd = SGDRegressor(
+        l1_ratio=params.l1_ratio,
+        alpha=params.alpha,
+        max_iter=params.max_iter,
+        penalty="elasticnet",
+    )
+    sgd.fit(housing_prepared_no_island, y_train_no_island)
+
+    r_score = sgd.score(housing_prepared_no_island, y_train_no_island)
+    housing_valid_no_island = full_pipeline.transform(x_test)
+    y_pred = sgd.predict(housing_valid_no_island)
+    
+    if y_true is not None:
+        rmse = np.sqrt(mean_squared_error(y_true, y_pred))
+        return r_score, y_pred, rmse
+
+    return r_score, y_pred, None
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def

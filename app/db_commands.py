@@ -10,7 +10,10 @@ from app.db import db
 from app.utils import format_data_housing, house_results_to_dataframe, regression
 from app.models import House, User, UserRole, ModelParams
 
+<<<<<<< HEAD
 from app.forms import ocean_proximity
+=======
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
 
 @click.command("insert-db")
 @with_appcontext
@@ -99,8 +102,12 @@ def predict_value():
     data = house_results_to_dataframe(data)
 
     # Variable nécessaire pour créer le menu de sélection
+<<<<<<< HEAD
     """ déplacé dans forms.py
     """
+=======
+    ocean_proximity = ["NEAR BAY", "<1H OCEAN", "INLAND", "NEAR OCEAN", "ISLAND"]
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
 
     # On demande les données nécessaire à la prédiction puis on les stock dans un dictionnaire
     d_test = {
@@ -115,8 +122,19 @@ def predict_value():
                 "ocean_proximity": [ocean_proximity[SelectionMenu.get_selection(ocean_proximity, "Proximité vers l'océan ? ", show_exit_option=False)]],
             }
     
+<<<<<<< HEAD
     # On prédit le prix
     r_score, y, rmse = regression(data, pd.DataFrame.from_dict(d_test), mp)
+=======
+    # On demande le prix réel de la maison s'il est connu
+    revenu_median = input("Prix médian réel ? (defaut : None)")
+    if revenu_median != "":
+        revenu_median = float(revenu_median)
+    else:
+        revenu_median = None
+    # On prédit le prix
+    r_score, y, rmse = regression(data, pd.DataFrame.from_dict(d_test), revenu_median, mp)
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
     print(f"R² : {r_score}")
     if rmse is not None:
         print(f"MSRE : +/- {rmse}")

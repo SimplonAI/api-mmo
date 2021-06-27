@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+<<<<<<< HEAD
 from wtforms import PasswordField, BooleanField, RadioField, StringField, SelectMultipleField
 from wtforms.fields.html5 import EmailField, IntegerField
 from wtforms.validators import DataRequired
@@ -7,6 +8,12 @@ from wtforms.validators import DataRequired
 ocean_proximity = ["NEAR BAY", "<1H OCEAN", "INLAND", "NEAR OCEAN", "ISLAND"]
 
 
+=======
+from wtforms import PasswordField, BooleanField, SelectMultipleField
+from wtforms.fields.html5 import EmailField
+from wtforms.validators import DataRequired
+
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
 # Chaque formulaire hérite de Flask-WTF afin de gérer plus facilement la validation des données et la génération des champs HTML
 
 class LoginForm(FlaskForm):
@@ -16,6 +23,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Mot de passe', validators=[DataRequired()])
     remember_me = BooleanField('Se souvenir de moi')
 
+<<<<<<< HEAD
 class PredictForm(FlaskForm): 
     """ Formulaire de prédiction
     """
@@ -35,3 +43,9 @@ class DashboardForm(FlaskForm):
     """Formulaire de personalisation du dashboard
     """
     plots = SelectMultipleField('Graphiques')
+=======
+class DashboardForm(FlaskForm):
+    """Formulaire de personalisation du dashboard
+    """
+    plots = SelectMultipleField('Graphiques')
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def

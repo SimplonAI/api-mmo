@@ -23,7 +23,10 @@ class House(db.Model):
     median_house_value = db.Column("ho_median_house_value", db.Integer, nullable=False)
     ocean_proximity = db.Column("ho_ocean_proximity", db.String(10), nullable=False)
     created_date = db.Column("ho_created_date", db.DateTime, server_default=func.now(), nullable=False)
+<<<<<<< HEAD
     updated_date = db.Column("ho_updated_date", db.DateTime, server_default=func.now(), nullable=False)
+=======
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
 
     def insert_from_pd(data_housing: DataFrame):
         data_housing = data_housing.rename(
@@ -84,5 +87,8 @@ class ModelParams(db.Model):
     active = db.Column("mp_active", db.Boolean, default=False, nullable=False)
     created_date = db.Column("ho_created_date", db.DateTime, server_default=func.now(), nullable=False)
 
+<<<<<<< HEAD
     def to_hash(self):
         return hash((int(self.max_iter), float(self.alpha), float(self.l1_ratio)))
+=======
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def

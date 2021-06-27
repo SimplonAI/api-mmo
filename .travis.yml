@@ -1,12 +1,17 @@
 os:
   - linux
 
+<<<<<<< HEAD
 dist: focal
+=======
+dist: xenial
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
 
 language: python
 python:
   - "3.9"
 
+<<<<<<< HEAD
 services:
   - docker
 
@@ -29,3 +34,7 @@ script:
   - cp .env.exemple .env
   - docker-compose up -d
   - docker-compose ps
+=======
+script:
+  - python -m pytest -v
+>>>>>>> e13e2267f607ff2a7b6b3afbe4833bb4ea435def
