@@ -10,3 +10,38 @@ html, body {
     white-space: nowrap;
     overflow: hidden;
 }
+
+.dashboard-menu {
+    z-index: 3;
+}
+
+table{ 
+	border-width:1px;
+	border-style:solid;
+	border-color:black;
+	table-layout:fixed;
+	width:100%;
+}
+
+td{
+	border-width:1px;
+	border-style:solid;
+	border-color:black;
+	text-align:center;
+	vertical-align:center;
+	width:50%;
+}
+
+th{
+	border-width:1.5px;
+	border-style:solid;
+	border-color:black;
+	text-align:center;
+	vertical-align:center;
+	width:50%;
+}
+
+.bi {
+    display: inline-block;
+    vertical-align: -.125em;
+}

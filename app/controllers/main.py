@@ -7,9 +7,9 @@ import math
 
 from werkzeug.utils import send_file
 from app.models import User, House
-from app.forms import DashboardForm, LoginForm, PredictForm
+from app.forms import DashboardForm, LoginForm, PredictForm, HouseForm
 from app.services import plot_manager
-from app.utils import prediction
+from app.utils import prediction, get_location
 from flask import Flask,render_template
 import pandas as pd
 import seaborn as sns
@@ -17,6 +17,7 @@ import io
 import base64
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 import matplotlib.pyplot as plt
+from app.db import db
 
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
@@ -72,19 +73,20 @@ def logout():
     logout_user()
     return redirect(url_for("main.login"))
 
-@main_blueprint.route("/estimation", methods =['GET',"POST"])
+
+@main_blueprint.route("/estimation", methods=["GET", "POST"])
 @login_required
-def estimation(): 
-    """Controller pour l'affichage de l'estimation
-    """
+def estimation():
+    """Controller pour l'affichage de l'estimation"""
 
     predict_form = PredictForm()
     r_score, y = None, None
-    if predict_form.validate_on_submit(): 
-        r_score,y = prediction(predict_form)
+    if predict_form.validate_on_submit():
+        r_score, y = prediction(predict_form)
 
-    return render_template("predict.html", predict_form = predict_form , r_score = r_score, y=y)
-
+    return render_template(
+        "predict.html", predict_form=predict_form, r_score=r_score, y=y
+    )
 
 
 @main_blueprint.route("/list_houses", methods=["GET", "POST"])
@@ -127,3 +129,55 @@ def estimation_graph():
     test.savefig("mongraph.png")
     
     return render_template ("estimation_graph.html")
+
+@main_blueprint.route("/add_house", methods=["GET", "POST"])
+@login_required
+def add_house():
+    """Controller pour ajouter un logements"""
+    house_form = HouseForm()
+    if house_form.validate_on_submit():
+
+        lat, lng = get_location(house_form)
+
+        insert_house = House(
+            longitude=round(lng, 2),
+            latitude=round(lat, 2),
+            housing_median_age=house_form.median_age.data,
+            total_rooms=house_form.total_rooms.data,
+            total_bedrooms=house_form.total_bedrooms.data,
+            population=house_form.population.data,
+            households=house_form.households.data,
+            median_income=house_form.median_income.data,
+            median_house_value=house_form.median_house_value.data,
+            ocean_proximity=house_form.ocean_proximity.data,
+        )
+        # On l'ajoute à la BDD
+        db.session.add(insert_house)
+        # On confirme les changements de la transaction
+        db.session.commit()
+
+        flash("Le formulaire est bien rempli success", category="info")
+        return redirect(url_for("main.list_houses"))
+
+    elif len(house_form.errors) > 0:
+        flash("Le formulaire n'est pas bien rempli", category="error")
+    return render_template("add_house.html", house_form=house_form)
+
+
+
+    
+ 
+# ici on récupère l'ID de la maison , dont la vignette a été cliquée, via le chemin "/house/house_id"
+@main_blueprint.route("/house/<house_id>", methods=["GET"])
+@login_required
+def info_house(house_id):
+
+# renvoie une erreur 404 si aucune id de maison n'a été relevé dans la requête vers le serveur
+
+    House_=House.query.filter_by(id=house_id).first_or_404()
+    
+    return render_template("info_house.html",
+                           house_=House_,
+                            title="info_house" 
+                            )
+

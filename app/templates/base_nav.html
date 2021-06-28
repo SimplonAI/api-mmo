@@ -1,67 +1,118 @@
 {% extends "base.html" %}
 {% block body %}
-<div class="container-fluid h-100">
-<div class="row h-100">
-    <nav id="sidebarMenu" class="col-auto col-md-3 col-lg-2 h-100 bg-dark text-white p-0 dashboard-menu position-fixed">
-        <div class="d-flex flex-column p-3 h-100">
-            <a href="/" class="d-flex align-items-center justify-content-center mb-3 m-0 text-white text-decoration-none">
-                <img src="{{ url_for('static', filename='img/icons/ai-logo-32.png') }}" class="bi me-2" width="32"
-                    height="32">
-                <span class="d-none d-md-inline fs-4">AI Stimate</span>
-            </a>
-            <hr>
-            <ul class="nav nav-pills flex-column mb-auto">
-                <li class="nav-item">
-                    <a href="{{ url_for('main.index') }}" class="nav-link text-white">
-                        <svg class="bi me-2" width="16" height="16">
-                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#speedometer2">
-                            </use>
-                        </svg>
-                        <span class="d-none d-md-inline">Dashboard</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{{ url_for('main.estimation') }}" class="nav-link text-white">
-                        <svg class="bi me-2" width="16" height="16">
-                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#table"></use>
-                        </svg>
-                        <span class="d-none d-md-inline">Prédiction</span>
-                    </a>
-                </li>
-                
-                <li class="nav-item">
-                    <a href="{{ url_for('main.list_houses') }}" class="nav-link text-white">
-                        <svg class="bi me-2" width="16" height="16">
-                            <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#card-list"></use>
-                        </svg>
-                        <span class="d-none d-md-inline">Liste logement</span>
-                    </a>
-                </li>
-
+<nav class="navbar navbar-dark bg-dark d-md-none">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <img src="{{ url_for('static', filename='img/icons/ai-logo-32.png') }}" width="32"
+                class="d-inline-block align-text-top">
+            AI Stimate
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                {% include "navigation.html" %}
+                <li class="nav-item"><a class="nav-link text-white" href="{{ url_for('main.logout') }}">Se
+                        déconnecter</a></li>
             </ul>
-            <hr>
-            <div class="dropdown">
-                <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-                    id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="{{ current_user.get_avatar() }}" alt="" width="32" height="32"
-                        class="rounded-circle me-2">
-                    <span class="d-none d-md-inline email"><strong>{{ current_user.email }}</strong></span>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <nav id="sidebarMenu"
+            class="d-none d-md-block col-auto col-md-3 col-lg-2 h-100 bg-dark text-white p-0 dashboard-menu position-fixed">
+            <div class="d-flex flex-column p-3 h-100">
+                <a href="/"
+                    class="d-flex align-items-center justify-content-center mb-3 m-0 text-white text-decoration-none">
+                    <img src="{{ url_for('static', filename='img/icons/ai-logo-32.png') }}" class="bi me-2" width="32"
+                        height="32">
+                    <span class="d-none d-md-inline fs-4">AI Stimate</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser">
-                    <li><a class="dropdown-item" href="{{ url_for('main.logout') }}">Se déconnecter</a></li>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+                    {% include "navigation.html" %}
                 </ul>
+                <hr>
+                <div class="dropdown">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                        id="dropdownUser" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ current_user.get_avatar() }}" alt="" width="32" height="32"
+                            class="rounded-circle me-2">
+                        <span class="d-none d-md-inline email"><strong>{{ current_user.email }}</strong></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser">
+                        <li><a class="dropdown-item" href="{{ url_for('main.logout') }}">Se déconnecter</a></li>
+                    </ul>
+                </div>
             </div>
-        </div>
-    </nav>
-    <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4">
-        <div class="border-bottom border-3 m-2">
-            <h1>{% block content_title %}{% endblock %}</h1>
-        </div>
-        <div class="">{% block content_body %}{% endblock %}
+        </nav>
+        <div class="col-md-9 col-lg-10 ms-sm-auto px-md-4">
+            <div class="border-bottom border-3 m-2 row">
+                <h1 class="col">
+                    <div class="row">
+                        <div class="col">{% block content_title %}{% endblock %}</div>
+                        <div class="col-auto">
+                            {% block title_button_left %}{% endblock %}
+                        </div>
+                    </div>
+                </h1>
+            </div>
+            <div class="">{% block content_body %}{% endblock %}
+            </div>
         </div>
     </div>
 </div>
+
 </div>
+<div class="toast-container position-absolute bottom-0 end-0 p-3" id="toasts">
+
+</div>
+
 {% endblock %}
-{% block scripts %}
+{% block base_scripts %}
+<script type="text/javascript">
+    class ToastElement extends HTMLElement {
+        constructor(message) {
+            super()
+            this.message = message
+            this.innerHTML = this.build()
+            this.classList.add("toast", "shadow")
+            this.style.display = "block"
+            this.setAttribute("role", "alert")
+            this.setAttribute("aria-live", "assertive")
+            this.setAttribute("aria-atomic", "true")
+        }
+
+        connectedCallback() {
+            this.controls = new bootstrap.Toast(this)
+            this.addEventListener("hidden.bs.toast", e => {
+                this.parentElement.removeChild(this)
+            })
+        }
+
+        build() {
+            return `<div class="toast-header">
+                    <img src="{{ url_for('static', filename='img/icons/ai-logo-16.png') }}" class="rounded me-2" alt="AI Stimate">
+                    <strong class="me-auto">AI Stimate</strong>
+                    <small></small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${this.message}
+                </div>`
+        }
+    }
+    class Toast {
+        static show(message = "") {
+            const toast = new ToastElement(message)
+            document.querySelector("#toasts").appendChild(toast)
+            toast.controls.show()
+        }
+    }
+    customElements.define("toast-element", ToastElement)
+</script>
+{% block scripts %}{% endblock %}
 {% endblock %}
