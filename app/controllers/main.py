@@ -4,11 +4,19 @@ from flask_login.utils import logout_user
 from werkzeug.security import check_password_hash
 from urllib.parse import urlparse, urljoin
 import math
+
+from werkzeug.utils import send_file
 from app.models import User, House
 from app.forms import DashboardForm, LoginForm, PredictForm
 from app.services import plot_manager
 from app.utils import prediction
-
+from flask import Flask,render_template
+import pandas as pd
+import seaborn as sns
+import io 
+import base64
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import matplotlib.pyplot as plt
 
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
@@ -100,3 +108,22 @@ def list_houses():
         current_page=page,
         title="list_housing",
     )
+
+fig,ax = plt.subplots()
+ax = sns.set_style(style="darkgrid")
+
+df = pd.read_csv("housing.csv")
+x = df["median_house_value"][::100]
+y = df["median_income"][::100]
+
+@main_blueprint.route("/estimation_graph")
+def estimation_graph(): 
+    """Controller pour afficher un graphique plaçant l'estimation 
+    sur l'ensemble des logements"""
+
+    
+    scatter_plot = sns.scatterplot(x, y)
+    test = scatter_plot.get_figure()
+    test.savefig("mongraph.png")
+    
+    return render_template ("estimation_graph.html")
