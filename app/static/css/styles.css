@@ -40,3 +40,8 @@ th{
 	vertical-align:center;
 	width:50%;
 }
+
+.bi {
+    display: inline-block;
+    vertical-align: -.125em;
+}

@@ -8,5 +8,6 @@
         "host": "localhost",
         "port": "5432",
         "bdd": "db_housing"
-    }
+    },
+    "MAPQUEST_KEY": "key_from_mapquest"
 }
