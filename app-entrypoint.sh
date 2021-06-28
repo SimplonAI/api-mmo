@@ -9,4 +9,9 @@ if [ ! -f ".db-initialized" ]; then
     python -m flask insert-db
     echo "initialized" > .db-initialized
 fi
-python -m gunicorn --workers=2 'app:create_app()' -b :5000
+
+if [ -z "$PORT" ]; then
+    python -m gunicorn --workers=2 'app:create_app()' -b :$PORT
+else
+    python -m gunicorn --workers=2 'app:create_app()' -b :5000
+fi
