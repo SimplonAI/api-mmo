@@ -1,7 +1,10 @@
-from app.plots import DistPlot, GeoPlots, PlotManager, ScatterPlot
 from flask_login import LoginManager
+from flask_wtf.csrf import CSRFProtect
+from app.plots import DistPlot, GeoPlots, PlotManager, ScatterPlot
 from app.models import User
 
+
+csrf = CSRFProtect()
 login_manager = LoginManager()
 
 
