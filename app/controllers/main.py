@@ -126,26 +126,16 @@ def add_house():
             ocean_proximity=house_form.ocean_proximity.data,
         )
         # On l'ajoute à la BDD
-
         db.session.add(insert_house)
         # On confirme les changements de la transaction
         db.session.commit()
-        flash(
-            "Le formulaire n'est pas bien rempli",
-            category="success",
-        )
+
+        flash("Le formulaire est bien rempli success", category="info")
         return redirect(url_for("main.list_houses"))
 
-
-    else:
-        flash(
-            "Le formulaire n'est pas bien rempli",
-            category="error",
-        )
-
+    elif len(house_form.errors) > 0:
+        flash("Le formulaire n'est pas bien rempli", category="error")
     return render_template("add_house.html", house_form=house_form)
 
     # if house_form.validate_on_submit():
     #    return render_template("add_house.html", house_form = house_form)
-
-
