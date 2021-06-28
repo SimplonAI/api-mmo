@@ -1,13 +1,15 @@
 from abc import ABCMeta, abstractmethod
 from app.utils import convert
 import json
-
+import matplotlib
+matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import seaborn as sn
 import pandas as pd
 import geopandas
 import contextily as cx
 import plotly
+import plotly.express as px
 import plotly.graph_objs as go
 from slugify import slugify
 
@@ -212,3 +214,25 @@ class DistPlot(AbstractPlot):
             },
         }
         return json.dumps(d, cls=plotly.utils.PlotlyJSONEncoder)
+
+class ResidualFittedPlot(AbstractPlot):
+    def __init__(self, name, x, y, y_label, key, regression_model=None) -> None:
+        super().__init__(name, x=x, y=y, y_label=y_label, x_label="Fitted Result", key=key)
+        self.regression_model = regression_model
+    def make_plot_img(self, data, ax):
+        if self.regression_model is not None:
+            sn.residplot(x=self.regression_model.self_predict(data), y=self.regression_model.y_train, lowess=True, line_kws=dict(color="red", alpha=1, lw=1), scatter_kws=dict(s=5))
+        if isinstance(self.y, str):
+            sn.residplot(x=self.x, y=self.y, data=data, lowess=False, scatter_kws=dict(s=5, alpha=.5), ax=ax)
+        else:
+            sn.residplot(x=self.x, y=self.y, lowess=False, scatter_kws=dict(s=5, alpha=.5), ax=ax)
+    def make_plot_json(self, data):
+        y_train_pred = list(self.regression_model.self_predict(data))
+        y_train = list(self.regression_model.y_train)
+        y_test = list(self.y)
+        y_test_pred = list(self.x)
+        y_data = y_train + y_test
+        split = [ "train" for i in range(len(y_train))] + [ "test" for i in range(len(y_test))]
+        d = pd.DataFrame.from_dict({self.y_label:y_data, "prediction": y_train_pred + y_test_pred, "split": split})
+        fig = px.scatter(d, x='prediction', y=self.y_label,marginal_y='violin', color='split', trendline='ols')
+        return fig.to_json()

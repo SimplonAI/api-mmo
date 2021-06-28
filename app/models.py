@@ -1,14 +1,15 @@
 from flask_login import UserMixin
 from dataclasses import dataclass
 from pandas.core.frame import DataFrame
-import urllib, hashlib
-from app.db import db
 from sqlalchemy.sql import func
+import urllib, hashlib
+from sqlalchemy_serializer import SerializerMixin
+from app.db import db
 
 
 @dataclass
-class House(db.Model):
-    """Table House de la BDD, il est possible de faire des requetes sql
+class House(db.Model, SerializerMixin):
+    """Table House de la BDD, il est possible de faire des requetes sql 
     avec House.query (voir la doc de flask-sqlalchemy)
     """
 
@@ -71,6 +72,9 @@ class User(UserMixin, db.Model):
         )
         gravatar_url += urllib.parse.urlencode({"s": "40"})
         return gravatar_url
+    
+    def has_permissions(self, perms: list[str]):
+        return all([perm in self.role.permissions for perm in perms])
 
 
 @dataclass
@@ -87,8 +91,8 @@ class UserRole(db.Model):
 
 
 @dataclass
-class ModelParams(db.Model):
-    """Table ModelParams de la BDD, il est possible de faire des requetes sql
+class ModelParams(db.Model, SerializerMixin):
+    """Table ModelParams de la BDD, il est possible de faire des requetes sql 
     avec ModelParams.query (voir la doc de flask-sqlalchemy)
     """
 

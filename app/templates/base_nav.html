@@ -65,6 +65,54 @@
         </div>
     </div>
 </div>
+
+</div>
+<div class="toast-container position-absolute bottom-0 end-0 p-3" id="toasts">
+
+</div>
+
 {% endblock %}
-{% block scripts %}
+{% block base_scripts %}
+<script type="text/javascript">
+    class ToastElement extends HTMLElement {
+        constructor(message) {
+            super()
+            this.message = message
+            this.innerHTML = this.build()
+            this.classList.add("toast", "shadow")
+            this.style.display = "block"
+            this.setAttribute("role", "alert")
+            this.setAttribute("aria-live", "assertive")
+            this.setAttribute("aria-atomic", "true")
+        }
+
+        connectedCallback() {
+            this.controls = new bootstrap.Toast(this)
+            this.addEventListener("hidden.bs.toast", e => {
+                this.parentElement.removeChild(this)
+            })
+        }
+
+        build() {
+            return `<div class="toast-header">
+                    <img src="{{ url_for('static', filename='img/icons/ai-logo-16.png') }}" class="rounded me-2" alt="AI Stimate">
+                    <strong class="me-auto">AI Stimate</strong>
+                    <small></small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    ${this.message}
+                </div>`
+        }
+    }
+    class Toast {
+        static show(message = "") {
+            const toast = new ToastElement(message)
+            document.querySelector("#toasts").appendChild(toast)
+            toast.controls.show()
+        }
+    }
+    customElements.define("toast-element", ToastElement)
+</script>
+{% block scripts %}{% endblock %}
 {% endblock %}

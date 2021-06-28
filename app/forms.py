@@ -1,12 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import (
-    PasswordField,
-    BooleanField,
-    RadioField,
-    StringField,
-    SelectMultipleField,
-)
-from wtforms.fields.html5 import EmailField, IntegerField, DecimalField
+from wtforms import PasswordField, BooleanField, RadioField, StringField, SelectMultipleField
+from wtforms.fields.html5 import EmailField, IntegerField, DecimalRangeField, IntegerRangeField, DecimalField
 from wtforms.validators import DataRequired
 
 
@@ -26,7 +20,6 @@ class LoginForm(FlaskForm):
 
 class PredictForm(FlaskForm):
     """Formulaire de prédiction"""
-
     adresse = StringField("Adresse", validators=[DataRequired()])
     adresse2 = StringField("Adresse 2", validators=[DataRequired()])
     ville = StringField("Ville", validators=[DataRequired()])
@@ -37,7 +30,6 @@ class PredictForm(FlaskForm):
     total_bedrooms = IntegerField("Nombre de chambres", validators=[])
     population = IntegerField("Population", validators=[])
     households = IntegerField("Nombres de personnes composant le foyer", validators=[])
-    median_income = DecimalField("Revenu médian", places=4, validators=[])
     ocean_proximity = RadioField(
         "Proximité à l'océan", choices=ocean_proximity, validators=[]
     )
@@ -67,4 +59,12 @@ class HouseForm(FlaskForm):
         "Proximité à l'océan", choices=ocean_proximity, validators=[]
     )
     median_house_value = IntegerField("Prix médian du biens immobilier", validators=[])
+    median_income = IntegerField("Revenu médian", validators=[])
+    ocean_proximity = RadioField("Proximité à l'océan", choices =ocean_proximity, validators=[])
 
+
+class ModelParamsForm(FlaskForm):
+    alpha = DecimalRangeField("Alpha", places=5)
+    l1_ratio = DecimalRangeField("L1 Ratio", places=5)
+    max_iter = IntegerField("Max Iter")
+    active = BooleanField("Actif")

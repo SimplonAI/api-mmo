@@ -56,15 +56,19 @@ Liste logement
             <div class="card col-12 my-3 shadow">
                 <div class="card-body">
                     <div class="row">
-                        <a class="col-auto text-decoration-none text-dark" href="#">
+                        <a class="col-auto text-decoration-none text-dark" href="/house/{{house.id}}">
                             <strong>id house :</strong> {{house.id}}&nbsp;
                             <strong>ocean proximity :</strong> {{house.ocean_proximity}}
                         </a>
 
                         <div class="col-auto ms-auto">
-                            <button class="btn btn-primary" type="submit">UPDATE</button>
+                            <button class="btn btn-primary" type="submit"><svg class="bi me-md-2" width="16" height="16">
+                                <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#pencil"></use>
+                            </svg> <span class="d-none d-md-inline">Modifier</span></button>
                             <a href="{{ url_for('api.delete_house', id=house.id) }}" class="btn btn-danger"
-                                onclick="if (!confirm('Voulez-vous vraiment supprimer le logement ?')) return false">DELETE</a>
+                                onclick="if (!confirm('Voulez-vous vraiment supprimer le logement ?')) return false"><svg class="bi me-md-2" width="16" height="16">
+                                    <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#trash"></use>
+                                </svg> <span class="d-none d-md-inline">Supprimer</span></a>
                         </div>
 
 

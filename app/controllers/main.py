@@ -137,5 +137,21 @@ def add_house():
         flash("Le formulaire n'est pas bien rempli", category="error")
     return render_template("add_house.html", house_form=house_form)
 
-    # if house_form.validate_on_submit():
-    #    return render_template("add_house.html", house_form = house_form)
+
+
+    
+ 
+# ici on récupère l'ID de la maison , dont la vignette a été cliquée, via le chemin "/house/house_id"
+@main_blueprint.route("/house/<house_id>", methods=["GET"])
+@login_required
+def info_house(house_id):
+
+# renvoie une erreur 404 si aucune id de maison n'a été relevé dans la requête vers le serveur
+
+    House_=House.query.filter_by(id=house_id).first_or_404()
+    
+    return render_template("info_house.html",
+                           house_=House_,
+                            title="info_house" 
+                            )
+

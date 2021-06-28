@@ -6,7 +6,7 @@ import os
 from app import controllers
 from app.db import db
 from app.db_commands import insert_db, create_user, predict_value
-from app.services import login_manager
+from app.services import login_manager, csrf
 
 
 def create_app(test_config=None):
@@ -41,10 +41,16 @@ def create_app(test_config=None):
     # Si la variable d'environnement (défini via terminal ou dans le fichier .env à la racine du dossier) SQLALCHEMY_DATABASE_URI existe
     # On remplace la config de connexion à la base de données par cette variable environnment
     if "SQLALCHEMY_DATABASE_URI" in os.environ:
-        app.config.from_mapping(
-            {"SQLALCHEMY_DATABASE_URI": os.environ["SQLALCHEMY_DATABASE_URI"]}
-        )
 
+        app.config.from_mapping({
+            "SQLALCHEMY_DATABASE_URI": os.environ["SQLALCHEMY_DATABASE_URI"]
+        })
+    
+    if "DATABASE_URL" in os.environ:
+        app.config.from_mapping({
+            "SQLALCHEMY_DATABASE_URI": os.environ["DATABASE_URL"]
+        })
+    
     # Dans le cas de tests, on passe directement la configuration à create_app, la config de test doit donc remplacer toutes les configs précédentes
     if test_config is not None:
         app.config.from_mapping(test_config)
@@ -57,6 +63,9 @@ def create_app(test_config=None):
 
     # On initialise l'outil de migration
     migrate.init_app(app, db)
+
+    # On ajoute la protection CSRF pour toutes les requetes POST
+    csrf.init_app(app)
 
     # On ajoute la commande "flask insert-db" à l'application
     app.cli.add_command(insert_db)

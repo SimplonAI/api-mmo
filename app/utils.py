@@ -1,6 +1,7 @@
 from os import pipe
 from app.forms import PredictForm
 import pandas as pd
+from flask import current_app
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
@@ -82,9 +83,12 @@ def house_results_to_dataframe(data_housing: pd.DataFrame):
     )
     return data_housing
 
-def get_location(predict_form: PredictForm): 
+def get_location(predict_form: PredictForm):
+    api_key = current_app.config.get("MAPQUEST_KEY")
+    if api_key is None:
+        current_app.logger.error("La clé API pour Mapquest n'est pas configuré (MAPQUEST_KEY)")
     parameters = {
-        "key": "yG86rBajhbKGAgq1HK2fze2LWUD4G5Hr",
+        "key": api_key,
         "location": f"{predict_form.adresse.data}, {predict_form.ville.data}, {predict_form.etat.data} {predict_form.code_postal.data}"
     }
 
