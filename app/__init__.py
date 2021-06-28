@@ -49,7 +49,12 @@ def create_app(test_config=None):
     
     if "DATABASE_URL" in os.environ:
         app.config.from_mapping({
-            "SQLALCHEMY_DATABASE_URI": os.environ["DATABASE_URL"]
+            "SQLALCHEMY_DATABASE_URI": os.environ["DATABASE_URL"].replace("postgres://", "postgresql+psycopg2://")
+        })
+
+    if "MAPQUEST_KEY" in os.environ:
+        app.config.from_mapping({
+            "MAPQUEST_KEY": os.environ["MAPQUEST_KEY"]
         })
     
     # Dans le cas de tests, on passe directement la configuration à create_app, la config de test doit donc remplacer toutes les configs précédentes
