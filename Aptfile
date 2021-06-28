@@ -1,0 +1,5 @@
+:repo:ppa ubuntugis/ppa
+libproj-dev proj-data proj-bin  
+libgeos-dev
+gdal-bin=3.2.1+dfsg-1~focal0
+libgdal-dev=3.2.1+dfsg-1~focal0
