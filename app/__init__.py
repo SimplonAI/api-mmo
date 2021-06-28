@@ -42,6 +42,11 @@ def create_app(test_config=None):
             "SQLALCHEMY_DATABASE_URI": os.environ["SQLALCHEMY_DATABASE_URI"]
         })
     
+    if "DATABASE_URL" in os.environ:
+        app.config.from_mapping({
+            "SQLALCHEMY_DATABASE_URI": os.environ["DATABASE_URL"]
+        })
+    
     # Dans le cas de tests, on passe directement la configuration à create_app, la config de test doit donc remplacer toutes les configs précédentes
     if test_config is not None:
         app.config.from_mapping(test_config)
