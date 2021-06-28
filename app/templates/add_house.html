@@ -8,6 +8,12 @@ Ajouter un logement
 
 {% block content_body %}
 
+{% for message in get_flashed_messages(category_filter=["error"]) %}
+<div class="alert alert-danger" role="alert">
+    {{ message }}
+</div>
+{% endfor %}
+
 <div class="col-12">
     <form class="row g-3 m-auto" method="POST">
         <div class="col-md-12">
@@ -55,6 +61,10 @@ Ajouter un logement
                   <label for="inputIncome">Revenu médian des foyers pour votre bloc</label>
                   {{ house_form.median_income(class="form-control", id="inputIncome") }}
               </div>
+              <div class="form-group col-md-6">
+                <label for="inputIncome">Prix médian du bien immobilier</label>
+                {{ house_form.median_house_value(class="form-control", id="inputIncome") }}
+            </div>
     
               <div class="row g-2 m-auto mt-2">
                   <p>Proximité à l'océan</p>

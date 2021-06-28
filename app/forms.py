@@ -1,6 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import PasswordField, BooleanField, RadioField, StringField, SelectMultipleField
-from wtforms.fields.html5 import EmailField, IntegerField
+from wtforms import (
+    PasswordField,
+    BooleanField,
+    RadioField,
+    StringField,
+    SelectMultipleField,
+)
+from wtforms.fields.html5 import EmailField, IntegerField, DecimalField
 from wtforms.validators import DataRequired
 
 
@@ -9,16 +15,18 @@ ocean_proximity = ["NEAR BAY", "<1H OCEAN", "INLAND", "NEAR OCEAN", "ISLAND"]
 
 # Chaque formulaire hérite de Flask-WTF afin de gérer plus facilement la validation des données et la génération des champs HTML
 
-class LoginForm(FlaskForm):
-    """Formulaire de connexion
-    """
-    email = EmailField('Adresse e-mail', validators=[DataRequired()])
-    password = PasswordField('Mot de passe', validators=[DataRequired()])
-    remember_me = BooleanField('Se souvenir de moi')
 
-class PredictForm(FlaskForm): 
-    """ Formulaire de prédiction
-    """
+class LoginForm(FlaskForm):
+    """Formulaire de connexion"""
+
+    email = EmailField("Adresse e-mail", validators=[DataRequired()])
+    password = PasswordField("Mot de passe", validators=[DataRequired()])
+    remember_me = BooleanField("Se souvenir de moi")
+
+
+class PredictForm(FlaskForm):
+    """Formulaire de prédiction"""
+
     adresse = StringField("Adresse", validators=[DataRequired()])
     adresse2 = StringField("Adresse 2", validators=[DataRequired()])
     ville = StringField("Ville", validators=[DataRequired()])
@@ -29,17 +37,21 @@ class PredictForm(FlaskForm):
     total_bedrooms = IntegerField("Nombre de chambres", validators=[])
     population = IntegerField("Population", validators=[])
     households = IntegerField("Nombres de personnes composant le foyer", validators=[])
-    median_income = IntegerField("Revenu médian", validators=[])
-    ocean_proximity = RadioField("Proximité à l'océan", choices =ocean_proximity, validators=[])
+    median_income = DecimalField("Revenu médian", places=4, validators=[])
+    ocean_proximity = RadioField(
+        "Proximité à l'océan", choices=ocean_proximity, validators=[]
+    )
+
+
 class DashboardForm(FlaskForm):
-    """Formulaire de personalisation du dashboard
-    """
-    plots = SelectMultipleField('Graphiques')
+    """Formulaire de personalisation du dashboard"""
+
+    plots = SelectMultipleField("Graphiques")
 
 
 class HouseForm(FlaskForm):
-    """Formulaire d'ajout de logement
-    """
+    """Formulaire d'ajout de logement"""
+
     adresse = StringField("Adresse", validators=[DataRequired()])
     adresse2 = StringField("Adresse 2", validators=[DataRequired()])
     ville = StringField("Ville", validators=[DataRequired()])
@@ -50,7 +62,9 @@ class HouseForm(FlaskForm):
     total_bedrooms = IntegerField("Nombre de chambres", validators=[])
     population = IntegerField("Population", validators=[])
     households = IntegerField("Nombres de personnes composant le foyer", validators=[])
-    median_income = IntegerField("Revenu médian", validators=[])
-    ocean_proximity = RadioField("Proximité à l'océan", choices =ocean_proximity, validators=[])
-
+    median_income = DecimalField("Revenu médian", places=4, validators=[])
+    ocean_proximity = RadioField(
+        "Proximité à l'océan", choices=ocean_proximity, validators=[]
+    )
+    median_house_value = IntegerField("Prix médian du biens immobilier", validators=[])
 
