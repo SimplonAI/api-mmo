@@ -33,6 +33,9 @@ class PredictForm(FlaskForm):
     ocean_proximity = RadioField(
         "Proximité à l'océan", choices=ocean_proximity, validators=[]
     )
+    median_income = DecimalField("Revenu médian", places=4, validators=[])
+
+
 
 
 class DashboardForm(FlaskForm):
