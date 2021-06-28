@@ -7,6 +7,7 @@ from app import controllers
 from app.db import db
 from app.db_commands import insert_db, create_user, predict_value
 from app.services import login_manager, csrf
+from app.template_filters import template_filters_manager
 
 
 def create_app(test_config=None):
@@ -66,6 +67,9 @@ def create_app(test_config=None):
 
     # On ajoute la protection CSRF pour toutes les requetes POST
     csrf.init_app(app)
+
+    # On ajoute les filtres personnalisés pour Jinja
+    template_filters_manager.init_app(app)
 
     # On ajoute la commande "flask insert-db" à l'application
     app.cli.add_command(insert_db)
