@@ -134,6 +134,19 @@ def list_model():
     params = ModelParams.query.all()
     return jsonify(dict(ok=True, data=[param.to_dict() for param in params]))
 
+@api_blueprint.route("/house/list")
+@login_required
+def list_house():
+    try:
+        items_per_page = int(request.args.get("per_page", "25")) 
+        page = int(request.args.get("p", "1"))
+    except ValueError:
+        abort(400)
+    houses = House.query.limit(items_per_page).offset(items_per_page * (page - 1)).all()
+    if houses is None:
+        return jsonify(dict(ok=True, data=[]))
+    return jsonify(dict(ok=True, data=[house.to_dict() for house in houses]))
+
 @api_blueprint.route("/resid-plot")
 @login_required
 def resid_plot():

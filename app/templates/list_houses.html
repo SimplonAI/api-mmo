@@ -17,102 +17,283 @@ Liste logement
 </div>
 {% endfor %}
 
-<div class="row">
-    <div class="col-auto m-auto">
+<div class="row justify-content-center">
+    <house-navigation aria-label="Navigation dans la liste des maisons" class="col-auto" pages-shown="9" max-page="{{ count_page }}" current-page="{{ current_page }}">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="?p={%if current_page > 1 %}{{current_page-1}}{% else %}1{% endif %}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
 
-        <div class="row">
+            {%for page in range(start_page, end_page+1)%}
 
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{current_page-1}}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
+            <li class="page-item"><a class="page-link" href="?p={{page}}">{{page}}</a></li>
 
-                    {%for page in range(current_page-1 if current_page > 1 else 1,current_page+2 if current_page < count_page else count_page+1)%}
+            {% endfor %}
+            <li class="page-item">
+                <a class="page-link" href="?p={%if current_page < count_page %}{{current_page+1}}{% else %}{{count_page}}{% endif %}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </house-navigation>
 
-                    <li class="page-item"><a class="page-link" href="?p={{page}}">{{page}}</a></li>
-
-                    {% endfor %}
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{current_page+1}}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
-
-        </div>
-    </div>
 </div>
 
 
-<div class="row">
-    <div class="col-6 m-auto">
-        <div class="row">
+<house-container p="{{ current_page }}" class="row">
+        {%for house in list_housing %}
+        <house-item class="card col-12 my-3 shadow" house="{{ house.to_dict()|tojson|string|b64encode }}">
+            <div class="card-body">
+                <div class="row">
+                    <a class="col-auto text-decoration-none text-dark" href="{{ url_for('main.info_house', house_id=house.id) }}">
+                        <strong>id house :</strong> {{house.id}}&nbsp;
+                        <strong>ocean proximity :</strong> {{house.ocean_proximity}}
+                    </a>
 
-            {%for house in list_housing %}
-            <div class="card col-12 my-3 shadow">
-                <div class="card-body">
-                    <div class="row">
-                        <a class="col-auto text-decoration-none text-dark" href="/house/{{house.id}}">
-                            <strong>id house :</strong> {{house.id}}&nbsp;
-                            <strong>ocean proximity :</strong> {{house.ocean_proximity}}
-                        </a>
-
-                        <div class="col-auto ms-auto">
-                            <button class="btn btn-primary" type="submit"><svg class="bi me-md-2" width="16" height="16">
-                                <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#pencil"></use>
-                            </svg> <span class="d-none d-md-inline">Modifier</span></button>
-                            <a href="{{ url_for('api.delete_house', id=house.id) }}" class="btn btn-danger"
-                                onclick="if (!confirm('Voulez-vous vraiment supprimer le logement ?')) return false"><svg class="bi me-md-2" width="16" height="16">
-                                    <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#trash"></use>
-                                </svg> <span class="d-none d-md-inline">Supprimer</span></a>
-                        </div>
-
-
+                    <div class="col-auto ms-auto">
+                        <a class="btn btn-primary"  href="{{ url_for('main.info_house', house_id=house.id) }}"><svg class="bi me-md-2" width="16" height="16">
+                                <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#pencil">
+                                </use>
+                            </svg> <span class="d-none d-md-inline">Modifier</span></a>
+                        <form class="d-inline delete-form" action="{{ url_for('api.delete_house', id=house.id) }}" method="POST">
+                            <button class="btn btn-danger delete"><svg
+                                    class="bi me-md-2" width="16" height="16">
+                                    <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#trash">
+                                    </use>
+                                </svg> <span class="d-none d-md-inline">Supprimer</span></button>
+                                <input id="csrf_token" name="csrf_token" type="hidden" value="{{ csrf_token }}" />
+                        </form>
                     </div>
                 </div>
             </div>
+        </house-item>
+        {% endfor %}
+</house-container>
+<div class="row justify-content-center">
+    <house-navigation aria-label="Navigation dans la liste des maisons" class="col-auto" pages-shown="9" max-page="{{ count_page }}" current-page="{{ current_page }}">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link" href="?p={%if current_page > 1 %}{{current_page-1}}{% else %}1{% endif %}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            {%for page in range(start_page, end_page+1)%}
+
+            <li class="page-item"><a class="page-link" href="?p={{page}}">{{page}}</a></li>
+
             {% endfor %}
-        </div>
-    </div>
+            <li class="page-item">
+                <a class="page-link" href="?p={%if current_page < count_page %}{{current_page+1}}{% else %}{{count_page}}{% endif %}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </house-navigation>
 </div>
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    class HouseNavigation extends HTMLElement {
+        constructor() {
+            super()
+            this.reload()
+        }
 
+        get maxPage() {
+            return parseInt(this.getAttribute("max-page"))
+        }
+        
+        set maxPage(max) {
+            this.setAttribute("max-page", max)
+        }
 
-<div class="row">
-    <div class="col-auto m-auto">
+        get pagesShown() {
+            return parseInt(this.getAttribute("pages-shown"))
+        }
 
-        <div class="row">
+        set pagesShown(pages) {
+            this.setAttribute("pages-shown", pages)
+        }
 
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{current_page-1}}" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
+        get currentPage() {
+            return parseInt(this.getAttribute("current-page"))
+        }
+        
+        set currentPage(p) {
+            this.setAttribute("current-page", p)
+        }
 
-                    {%for page in range(current_page-1 if current_page > 1 else 1,current_page+2 if current_page < count_page else count_page+1)%}
+        get startPage() {
+            let startPage = 1
+            if (this.currentPage > this.pagesShown/2)
+                startPage = (parseInt(Math.min((parseFloat(this.currentPage)+Math.floor(this.pagesShown/2)), this.maxPage)) - this.pagesShown + 1)
+        
+            return (startPage < 1) ? 1 : startPage
+        }
 
-                    <li class="page-item"><a class="page-link" href="?p={{page}}">{{page}}</a></li>
+        get endPage() {
+            let endPage = (this.startPage + this.pagesShown - 1)
+            return endPage > parseInt(this.maxPage) ? parseInt(this.maxPage) : endPage
+        }
 
-                    {% endfor %}
-                    <li class="page-item">
-                        <a class="page-link" href="?p={{current_page+1}}" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+        static get observedAttributes() {
+            return ["current-page", "max-page", "pages-shown"]
+        }
 
-        </div>
-    </div>
-</div>
+        attributeChangedCallback(name, oldValue, newValue) {
+            if (name == "current-page") {
+                document.querySelector("house-container").setAttribute("p", this.currentPage)
+            }
+            this.reload()
+        }
 
+        attachListeners() {
+            this.querySelectorAll("a").forEach(link => link.addEventListener("click", (e) => {
+                e.preventDefault()
+                document.querySelectorAll("house-navigation").forEach(houseNav => houseNav.currentPage = parseInt(e.target.search.replace("?p=", "")))
+            }))
+        }
 
+        reload() {
+            this.innerHTML = this.build()
+            this.attachListeners()
+        }
+        build() {
+            const links = []
+            for(let i = this.startPage; i <= this.endPage; i++) {
+                links.push(`<li class="page-item"><a class="page-link" href="?p=${i}">${i}</a></li>`)
+            }
 
+            return `<ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" href="?p=${this.currentPage > 1 ? this.maxPage-1 : 1}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                ${links.join("\n")}
+                <li class="page-item">
+                    <a class="page-link" href="?p=${this.currentPage < this.maxPage ? this.currentPage+1 : this.maxPage}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>`
+        }
+    }
+    customElements.define("house-navigation", HouseNavigation)
+    class HouseItem extends HTMLElement {
+        constructor() {
+            super()
+            this.reload()
+        }
 
+        get house() {
+            return JSON.parse(atob(this.getAttribute("house")))
+        }
 
+        set house(house) {
+            this.setAttribute("house", btoa(JSON.stringify(house)))
+        }
+
+        static get observedAttributes() {
+            return ["house"]
+        }
+
+        attributeChangedCallback(name, oldValue, newValue) {
+            if (name == "house" && oldValue !== newValue) {
+                this.querySelector(".house-id").textContent = this.house.id
+                this.querySelector(".house-ocean").textContent = this.house.ocean_proximity
+            }
+        }
+
+        attachListeners() {
+            this.querySelector(".delete-form").addEventListener("submit", (e) => {
+                e.preventDefault()
+                if (confirm("Voulez-vous vraiment supprimer les paramètres ?"))
+                    fetch(e.target.action, {
+                        headers: {
+                            "Content-Type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token() }}"
+                        },
+                        method: "DELETE"
+                    }).then(response => {
+                        return response.json()
+                    }).then(result => {
+                        if (result !== undefined) {
+                            if (result.ok) {
+                                this.parentElement.removeChild(this)
+                                Toast.show(result.message)
+                            } else Toast.show(result.error || 'Error')
+                        }
+                    })
+            })
+        }
+
+        reload() {
+            this.innerHTML = this.build()
+            this.attachListeners()
+        }
+        build() {
+            return `<div class="card-body">
+                <div class="row">
+                    <a class="col-auto text-decoration-none text-dark" href="#">
+                        <strong>id house :</strong> <span class="house-id">${this.house.id}</span>&nbsp;
+                        <strong>ocean proximity :</strong> <span class="house-ocean">${this.house.ocean_proximity}</span>
+                    </a>
+
+                    <div class="col-auto ms-auto">
+                        <a href="#" class="btn btn-primary"><svg class="bi me-md-2" width="16" height="16">
+                                <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#pencil">
+                                </use>
+                            </svg> <span class="d-none d-md-inline">Modifier</span></a>
+                        <form action="/api/list_houses/delete/${this.house.id}" method="POST" class="d-inline delete-form">
+                        <button class="btn btn-danger"><svg
+                                class="bi me-md-2" width="16" height="16">
+                                <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#trash">
+                                </use>
+                            </svg> <span class="d-none d-md-inline">Supprimer</span></button>
+                        </form>
+                    </div>
+                </div>
+            </div>`
+        }
+    }
+    customElements.define("house-item", HouseItem)
+    class HouseContainer extends HTMLElement {
+        constructor() {
+            super()
+        }
+        get p() {
+            return parseInt(this.getAttribute("p"))
+        }
+        set p(p) {
+            this.setAttribute("p", p.toString())
+        }
+        static get observedAttributes() {
+            return ["p"]
+        }
+        attributeChangedCallback(name, oldValue, newValue) {
+            if (name == "p" && oldValue !== newValue) {
+                this.getHouses()
+            }
+        }
+        async getHouses() {
+            const response = await fetch(`/api/house/list?p=${this.p}`)
+            const result = await response.json()
+            if (result.ok) {
+                this.houses = result.data
+                this.reload()
+            }
+        }
+        reload() {
+            this.innerHTML = this.build()
+        }
+        build() {
+            return this.houses.map(house => `<house-item class="card col-12 my-3 shadow" house="${btoa(JSON.stringify(house))}"></house-item>`).join("\n")
+        }
+    }
+    customElements.define("house-container", HouseContainer)
+</script>
 {% endblock %}
