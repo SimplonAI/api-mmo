@@ -30,6 +30,7 @@ class PredictForm(FlaskForm):
     total_bedrooms = IntegerField("Nombre de chambres", validators=[])
     population = IntegerField("Population", validators=[])
     households = IntegerField("Nombres de personnes composant le foyer", validators=[])
+    median_income = IntegerField("Revenu médian", validators=[])
     ocean_proximity = RadioField(
         "Proximité à l'océan", choices=ocean_proximity, validators=[]
     )

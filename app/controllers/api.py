@@ -21,7 +21,7 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg
 
 from app.forms import ModelParamsForm
 from app.services import plot_manager
-from app.plots import ResidualFittedPlot
+from app.plots import ResidualFittedPlot, ScatterPlotPoint
 from app.db import db
 from app.models import House
 from app.utils import house_results_to_dataframe
@@ -157,6 +157,27 @@ def resid_plot():
         os.mkdir(f"{current_app.instance_path}/cache")
     if os.path.isfile(f"{current_app.instance_path}/cache/resid_plot_{mp.to_hash()}_{timestamp}.png"):
         return send_file(f"{current_app.instance_path}/cache/resid_plot_{mp.to_hash()}_{timestamp}.png", mimetype='image/png')
+    fig = res_plot.plot(data)
+    png = BytesIO()
+    FigureCanvasAgg(fig).print_png(png)
+    return Response(png.getvalue(), mimetype='image/png')
+
+
+@api_blueprint.route("/plot-estimate", methods=["GET"])
+@login_required
+def plot_estimate():
+    try:
+        median_income = float(request.args.get("median_income", ""))
+        median_house_value = float(request.args.get("median_house_value", ""))
+    except ValueError:
+        abort(400)
+    data = house_results_to_dataframe(pd.read_sql("SELECT * FROM house", db.engine))
+    # TODO: slicing data
+    data = data[::100]
+    
+    res_plot = ScatterPlotPoint("Positionnement du Bien",  "median_house_value", "median_income", "Revenue médian", "Prix médian", key="median_price_income_point", point_x=median_house_value, point_y=median_income)
+    if "json" in request.args:
+        return Response(res_plot.make_plot_json(data), mimetype="application/json")
     fig = res_plot.plot(data)
     png = BytesIO()
     FigureCanvasAgg(fig).print_png(png)

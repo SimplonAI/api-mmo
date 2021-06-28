@@ -111,25 +111,6 @@ def list_houses():
         title="list_housing",
     )
 
-fig,ax = plt.subplots()
-ax = sns.set_style(style="darkgrid")
-
-df = pd.read_csv("housing.csv")
-x = df["median_house_value"][::100]
-y = df["median_income"][::100]
-
-@main_blueprint.route("/estimation_graph")
-def estimation_graph(): 
-    """Controller pour afficher un graphique plaçant l'estimation 
-    sur l'ensemble des logements"""
-
-    
-    scatter_plot = sns.scatterplot(x, y)
-    test = scatter_plot.get_figure()
-    test.savefig("mongraph.png")
-    
-    return render_template ("estimation_graph.html")
-
 @main_blueprint.route("/add_house", methods=["GET", "POST"])
 @login_required
 def add_house():
