@@ -1,6 +1,14 @@
 {% extends "base_nav.html" %}
 {% block title %}Liste logement{% endblock %}
-{% block content_title %}Liste logement{% endblock %}
+{% block title_button_left %}<a href="{{ url_for('main.add_house') }}" type="button" class="btn btn-success">Ajouter un
+    logement</a>
+{% endblock %}
+
+{% block content_title %}
+
+Liste logement
+{% endblock %}
+
 {% block content_body %}
 
 {% for message in get_flashed_messages(category_filter=["info"]) %}
@@ -39,13 +47,13 @@
         <house-item class="card col-12 my-3 shadow" house="{{ house.to_dict()|tojson|string|b64encode }}">
             <div class="card-body">
                 <div class="row">
-                    <a class="col-auto text-decoration-none text-dark" href="#">
+                    <a class="col-auto text-decoration-none text-dark" href="{{ url_for('main.info_house', house_id=house.id) }}">
                         <strong>id house :</strong> {{house.id}}&nbsp;
                         <strong>ocean proximity :</strong> {{house.ocean_proximity}}
                     </a>
 
                     <div class="col-auto ms-auto">
-                        <a class="btn btn-primary" href="#"><svg class="bi me-md-2" width="16" height="16">
+                        <a class="btn btn-primary"  href="{{ url_for('main.info_house', house_id=house.id) }}"><svg class="bi me-md-2" width="16" height="16">
                                 <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#pencil">
                                 </use>
                             </svg> <span class="d-none d-md-inline">Modifier</span></a>

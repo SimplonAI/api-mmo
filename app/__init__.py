@@ -9,17 +9,18 @@ from app.db_commands import insert_db, create_user, predict_value
 from app.services import login_manager, csrf
 from app.template_filters import template_filters_manager
 
+
 def create_app(test_config=None):
-    # On initialise l'app flask 
+    # On initialise l'app flask
     app = Flask(__name__, instance_relative_config=True)
-    
+
     # On initialise flask-migrate pour les outils de migration de la BDD
     migrate = Migrate()
 
     # Configuration de l'application
     # On récupère en premier la configuration d'un fichier config.json présent dans /instance/config.json
     # Tout d'abord on vérifie que le fichier config.json est bien présent dans le dossier instance
-    if os.path.isfile(app.instance_path + '/config.json'):
+    if os.path.isfile(app.instance_path + "/config.json"):
         # S'il est présent, on charge la configuration de celui-ci dans l'app flask
         app.config.from_file("config.json", load=json.load)
         # Dans le cas où DEFAULT_DB est bien présent dans la config, on met en place la configuration de SQLAlchemy en fonction des éléments présents dans config.json
@@ -34,19 +35,26 @@ def create_app(test_config=None):
             )
     else:
         # Au cas où il n'existe pas, on avertit que celui-ci n'est pas présent
-        app.logger.warning("Aucun fichier config.json n'est présent dans le dossier /instance/. L'application risque de mal fonctionner !")
+        app.logger.warning(
+            "Aucun fichier config.json n'est présent dans le dossier /instance/. L'application risque de mal fonctionner !"
+        )
 
     # Si la variable d'environnement (défini via terminal ou dans le fichier .env à la racine du dossier) SQLALCHEMY_DATABASE_URI existe
     # On remplace la config de connexion à la base de données par cette variable environnment
     if "SQLALCHEMY_DATABASE_URI" in os.environ:
+
         app.config.from_mapping({
             "SQLALCHEMY_DATABASE_URI": os.environ["SQLALCHEMY_DATABASE_URI"]
+        })
+    
+    if "DATABASE_URL" in os.environ:
+        app.config.from_mapping({
+            "SQLALCHEMY_DATABASE_URI": os.environ["DATABASE_URL"]
         })
     
     # Dans le cas de tests, on passe directement la configuration à create_app, la config de test doit donc remplacer toutes les configs précédentes
     if test_config is not None:
         app.config.from_mapping(test_config)
-
 
     # On initialise SQLAlchemy avec les éléments de config à la BDD
     db.init_app(app)
