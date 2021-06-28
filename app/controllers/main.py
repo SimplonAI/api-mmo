@@ -89,14 +89,29 @@ def list_houses():
     except ValueError:
         page = 1
 
-    count_page = House.query.count()
+    count_house = House.query.count()
+    pages_shown = 9
+    items_per_page = 25
+    max_pages = math.ceil(float(count_house) / float(items_per_page))
+    start_page = 1
+    if page > pages_shown/2:
+        start_page = (int(min((float(page)+math.floor(float(pages_shown)/2)), max_pages)) - pages_shown + 1)
 
-    list_housing = House.query.limit(25).offset(25 * (page - 1)).all()
+    if start_page < 1:
+        start_page = 1
+
+    end_page = (start_page + pages_shown - 1)
+    if end_page > int(max_pages):
+        end_page = int(max_pages)
+
+    list_housing = House.query.limit(items_per_page).offset(items_per_page * (page - 1)).all()
 
     return render_template(
         "list_houses.html",
         list_housing=list_housing,
-        count_page=math.ceil(count_page / 25),
+        count_page=max_pages,
         current_page=page,
+        start_page=start_page,
+        end_page=end_page,
         title="list_housing",
     )
