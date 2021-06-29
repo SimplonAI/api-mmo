@@ -4,12 +4,20 @@ from flask_login.utils import logout_user
 from werkzeug.security import check_password_hash
 from urllib.parse import urlparse, urljoin
 import math
+
+from werkzeug.utils import send_file
 from app.models import User, House
 from app.forms import DashboardForm, LoginForm, PredictForm, HouseForm
 from app.services import plot_manager
 from app.utils import prediction, get_location
+from flask import Flask,render_template
+import pandas as pd
+import seaborn as sns
+import io 
+import base64
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+import matplotlib.pyplot as plt
 from app.db import db
-
 
 def is_safe_url(target):
     ref_url = urlparse(request.host_url)
@@ -117,7 +125,6 @@ def list_houses():
         end_page=end_page,
         title="list_housing",
     )
-
 
 @main_blueprint.route("/add_house", methods=["GET", "POST"])
 @login_required
