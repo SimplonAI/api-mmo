@@ -170,3 +170,7 @@ def info_house(house_id):
                             title="info_house" 
                             )
 
+@main_blueprint.route("/faq")
+@login_required
+def faq():
+    return render_template("faq.html")
