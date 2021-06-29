@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, request, url_for
+from flask import Blueprint, render_template, flash, redirect, request, url_for, make_response, send_from_directory
 from flask_login import login_required, login_user
 from flask_login.utils import logout_user
 from werkzeug.security import check_password_hash
@@ -218,3 +218,11 @@ def info_house(house_id):
 @login_required
 def faq():
     return render_template("faq.html")
+
+@main_blueprint.route('/sw.js')
+def sw():
+    response=make_response(
+                     send_from_directory('static',path='sw.js'))
+    #change the content header file. Can also omit; flask will handle correctly.
+    response.headers['Content-Type'] = 'application/javascript'
+    return response
