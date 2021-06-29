@@ -12,7 +12,7 @@
     </div>
   </div>
   <div class="card">
-      <div class="card-body">
+      <div id="plot-estimate" class="card-body">
           <img src="{{ url_for('api.plot_estimate') }}?median_income={{ predict_form.median_income.data }}&median_house_value={{ y[0] }}">
       </div>
   </div>
@@ -83,11 +83,21 @@
     {{ predict_form.csrf_token }}
 </form>
 </div>
-
-
-
-  {% endblock %}
-
-
+{% endblock %}
+{% block scripts %}
+<script type="text/javascript">
+    const plot = document.getElementById("plot-estimate")
+    if (plot !== undefined) {
+        fetch(plot.querySelector("img").src + "&json").then(response => {
+            return response.json()
+        }).then(result => {
+            let div = document.createElement("div")
+            Plotly.newPlot(div, result.data, result.layout)
+            plot.innerHTML=""
+            plot.appendChild(div)
+        })
+    }
+</script>
+{% endblock %}
 
 

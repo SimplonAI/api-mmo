@@ -9,5 +9,4 @@ class TemplateFiltersManager():
 template_filters_manager = TemplateFiltersManager()
 
 def b64encode(s):
-    print(s)
     return base64.b64encode(str(s).encode()).decode("ascii")

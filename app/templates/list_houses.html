@@ -53,7 +53,7 @@ Liste logement
                     </a>
 
                     <div class="col-auto ms-auto">
-                        <a class="btn btn-primary"  href="{{ url_for('main.info_house', house_id=house.id) }}"><svg class="bi me-md-2" width="16" height="16">
+                        <a class="btn btn-primary" href="{{ url_for('main.edit_house') }}?id={{ house.id }}"><svg class="bi me-md-2" width="16" height="16">
                                 <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#pencil">
                                 </use>
                             </svg> <span class="d-none d-md-inline">Modifier</span></a>
@@ -244,7 +244,7 @@ Liste logement
                     </a>
 
                     <div class="col-auto ms-auto">
-                        <a href="/house/${this.house.id}" class="btn btn-primary"><svg class="bi me-md-2" width="16" height="16">
+                        <a href="{{ url_for('main.edit_house') }}?id=${this.house.id}" class="btn btn-primary"><svg class="bi me-md-2" width="16" height="16">
                                 <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#pencil">
                                 </use>
                             </svg> <span class="d-none d-md-inline">Modifier</span></a>

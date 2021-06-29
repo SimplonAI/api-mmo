@@ -1,44 +1,79 @@
 {% extends "base_nav.html" %}
 {% block title %}Logement {{house_id}}{% endblock %}
+{% block title_button_left %}<button class='btn btn-outline-primary' onclick="window.location.href='/list_houses';">Retour aux résultats</button>{% endblock %}
+{% block content_title %}Logement {{house_id}}{% endblock %}
 {% block content_body %}
-<h1>Profil : Logement {{house_.id}}</h1>
-<div class='div_info'>
-    <div class="row" class='div_info'>
-        <table>
-            <tr>
-                <th>Id </th>
-                <th>Longitude</th>
-                <th>Lattitude</th>
-                <th>age median</th>
-                <th>nombre de pièces</th>
-                <th>nombre de chambres</th>
-                <th>population</th> 
-                <th> salaire median (dollar)</th>
-                <th> surface du bien (m²)</th>
-                <th>valeur moyenne de vente (dollar)</th>
-                <th>proximité avec l'océan</th>
-                <th>created date</th>
-            </tr>
-
-            <tr>
-                <td>{{house_.id}} </td>
-                <td>{{house_.longitude}}</td>
-                <td>{{house_.latitude}}</td>
-                <td>{{house_.housing_median_age}}</td>
-                <td>{{house_.total_rooms}}</td>
-                <td>{{house_.total_bedrooms}}</td>
-                <td>{{house_.population}}</td> 
-                <td>{{house_.median_income}}</td>
-                <td>{{house_.households}}</td>
-                <td>{{house_.median_house_value}}</td>
-                <td>{{house_.ocean_proximity}}</td>
-                <td>{{house_.created_date.strftime("%d/%m/%y %H:%m")}}</td>
-            </tr>
-        </table>
-    </div> 
-    <div class='div_info'>   
-        <button class='btn btn-outline-primary' onclick="window.location.href='/list_houses';">Retour aux résultats</button>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-auto fw-bold">
+                Id
+            </div>
+            <div class="col">{{ house_.id }}</div>
+        </div>
+        <div class="row">
+            <div class="col-auto fw-bold">
+                Longitude
+            </div>
+            <div class="col">{{ house_.longitude }}</div>
+            <div class="col-auto fw-bold">
+                Lattitude
+            </div>
+            <div class="col">{{ house_.lattitude }}</div>
+        </div>
+        <div class="row">
+            <div class="col-auto fw-bold">
+                Age médian
+            </div>
+            <div class="col">{{ house_.housing_median_age }}</div>
+        </div>
+        <div class="row">
+            <div class="col-auto fw-bold">
+                Nombre de pièces
+            </div>
+            <div class="col">{{ house_.total_rooms }}</div>
+            <div class="col-auto fw-bold">
+                Nombre de chambres
+            </div>
+            <div class="col">{{ house_.total_bedrooms }}</div>
+        </div>
+        <div class="row">
+            <div class="col-auto fw-bold">
+                Population
+            </div>
+            <div class="col">{{ house_.population }}</div>
+        </div>
+        <div class="row">
+            <div class="col-auto fw-bold">
+                Salaire médian (dm$)
+            </div>
+            <div class="col">{{ house_.median_income }}</div>
+        </div>
+        <div class="row">
+            <div class="col-auto fw-bold">
+                Surface du bien
+            </div>
+            <div class="col">{{ house_.households }}</div>
+        </div>
+        <div class="row">
+            <div class="col-auto fw-bold">
+                Valeur médianne du bien
+            </div>
+            <div class="col">{{ house_.median_house_value }}</div>
+        </div>
+        <div class="row">
+            <div class="col-auto fw-bold">
+                Proximité à l'océan
+            </div>
+            <div class="col">{{ house_.ocean_proximity }}</div>
+        </div>
+        <div class="row">
+            <div class="col-auto fw-bold">
+                Date de création
+            </div>
+            <div class="col">{{ house_.created_date.strftime("%d/%m/%y %H:%m") }}</div>
+        </div>
     </div>
-    
+</div>
 {%endblock%}
 

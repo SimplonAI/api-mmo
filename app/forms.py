@@ -64,6 +64,25 @@ class HouseForm(FlaskForm):
     )
     median_house_value = IntegerField("Prix médian du biens immobilier", validators=[])
 
+class HouseEditForm(FlaskForm):
+    """Formulaire de modification de logement"""
+
+    adresse = StringField("Adresse", validators=[])
+    adresse2 = StringField("Adresse 2", validators=[])
+    ville = StringField("Ville", validators=[])
+    etat = StringField("État", validators=[])
+    code_postal = IntegerField("Code Postal", validators=[])
+    median_age = IntegerField("Âge moyen du foyer", validators=[])
+    total_rooms = IntegerField("Nombres de pièces", validators=[])
+    total_bedrooms = IntegerField("Nombre de chambres", validators=[])
+    population = IntegerField("Population", validators=[])
+    households = IntegerField("Nombres de personnes composant le foyer", validators=[])
+    median_income = DecimalField("Revenu médian", places=4, validators=[])
+    ocean_proximity = RadioField(
+        "Proximité à l'océan", choices=ocean_proximity, validators=[]
+    )
+    median_house_value = IntegerField("Prix médian du biens immobilier", validators=[])
+
 
 class ModelParamsForm(FlaskForm):
     alpha = DecimalRangeField("Alpha", places=5)

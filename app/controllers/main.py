@@ -5,18 +5,11 @@ from werkzeug.security import check_password_hash
 from urllib.parse import urlparse, urljoin
 import math
 
-from werkzeug.utils import send_file
 from app.models import User, House
-from app.forms import DashboardForm, LoginForm, PredictForm, HouseForm
+from app.forms import DashboardForm, LoginForm, PredictForm, HouseForm, HouseEditForm
 from app.services import plot_manager
 from app.utils import prediction, get_location
-from flask import Flask,render_template
-import pandas as pd
-import seaborn as sns
-import io 
-import base64
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-import matplotlib.pyplot as plt
+from flask import render_template
 from app.db import db
 
 def is_safe_url(target):
@@ -158,6 +151,50 @@ def add_house():
     elif len(house_form.errors) > 0:
         flash("Le formulaire n'est pas bien rempli", category="error")
     return render_template("add_house.html", house_form=house_form)
+
+@main_blueprint.route("/edit_house", methods=["GET", "POST"])
+@login_required
+def edit_house():
+    """Controller pour modifier un logement"""
+    house_form = HouseEditForm()
+    try:
+        id = int(request.args.get("id"))
+    except ValueError:
+        flash("Mauvais id", category="error")
+        return redirect(url_for("main.list_houses"))
+    house: House = House.query.get(id)
+    if house is None:
+        flash("La maison n'existe pas", category="error")
+        return redirect(url_for("main.list_houses"))
+    if house_form.is_submitted():
+        if house_form.adresse != "":
+            lat, lng = get_location(house_form)
+            house.latitude = lat
+            house.longitude = lng
+        house.housing_median_age=house_form.median_age.data if house_form.median_age.data != "" else house.housing_median_age
+        house.total_rooms=house_form.total_rooms.data if house_form.total_rooms.data != "" else house.total_rooms
+        house.total_bedrooms=house_form.total_bedrooms.data  if house_form.total_bedrooms.data != "" else house.total_bedrooms
+        house.population=house_form.population.data if house_form.population.data != "" else house.population
+        house.households=house_form.households.data if house_form.households.data != "" else house.households
+        house.median_income=house_form.median_income.data if house_form.median_income.data != "" else house.median_income
+        house.median_house_value=house_form.median_house_value.data if house_form.median_house_value.data != "" else house.median_house_value
+        house.ocean_proximity=house_form.ocean_proximity.data if house_form.ocean_proximity.data != "" else house.ocean_proximity
+        if len(house_form.errors) == 0:
+            # On confirme les changements de la transaction
+            db.session.commit()
+            flash("La maison a bien été modifiée", category="info")
+
+        if len(house_form.errors) > 0:
+            flash("Le formulaire n'est pas bien rempli", category="error")
+    house_form.median_age.data = house.housing_median_age
+    house_form.total_bedrooms.data = house.total_bedrooms
+    house_form.total_rooms.data = house.total_rooms
+    house_form.population.data = house.population
+    house_form.households.data = house.households
+    house_form.median_income.data = house.median_income
+    house_form.median_house_value.data = house.median_house_value
+    house_form.ocean_proximity.data = house.ocean_proximity
+    return render_template("edit_house.html", house_form=house_form)
 
 
 

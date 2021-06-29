@@ -188,7 +188,7 @@ def plot_estimate():
     # TODO: slicing data
     data = data[::100]
     
-    res_plot = ScatterPlotPoint("Positionnement du Bien",  "median_house_value", "median_income", "Revenue médian", "Prix médian", key="median_price_income_point", point_x=median_house_value, point_y=median_income)
+    res_plot = ScatterPlotPoint("Positionnement du Bien",  "median_house_value", "median_income", "Revenue médian", "Prix médian", key="median_price_income_point", point_x=[median_house_value], point_y=[median_income])
     if "json" in request.args:
         return Response(res_plot.make_plot_json(data), mimetype="application/json")
     fig = res_plot.plot(data)
