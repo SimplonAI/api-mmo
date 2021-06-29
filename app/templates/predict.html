@@ -11,6 +11,11 @@
       <p class="card-text"> L'estimation de votre bien est de {{"{0:0.2f}".format(y[0])}} $ avec une confiance à {{"{0:0.2f}".format(r_score*100)}} %.</p>
     </div>
   </div>
+  <div class="card">
+      <div class="card-body">
+          <img src="{{ url_for('api.plot_estimate') }}?median_income={{ predict_form.median_income.data }}&median_house_value={{ y[0] }}">
+      </div>
+  </div>
 {% endif %}
 
 
@@ -73,7 +78,7 @@
           </div>
       </div>
     <div class="row my-3">
-      <button type="submit" class="btn btn-primary">Estimer le bien</button>
+      <button type="submit" class="btn btn-primary">{% if y %}Estimer un autre bien{% else %}Estimer le bien{% endif %}</button>
     </div>
     {{ predict_form.csrf_token }}
 </form>

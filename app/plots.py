@@ -236,3 +236,22 @@ class ResidualFittedPlot(AbstractPlot):
         d = pd.DataFrame.from_dict({self.y_label:y_data, "prediction": y_train_pred + y_test_pred, "split": split})
         fig = px.scatter(d, x='prediction', y=self.y_label,marginal_y='violin', color='split', trendline='ols')
         return fig.to_json()
+
+
+class ScatterPlotPoint(AbstractPlot):
+    def __init__(self, name, x, y, x_label, y_label, key, point_x, point_y) -> None:
+        super().__init__(name, x=x, y=y, x_label=x_label, y_label=y_label, key=key)
+        self.point_x = point_x
+        self.point_y = point_y
+    def make_plot_img(self, data, ax):
+        sn.scatterplot(self.x, self.y, data=data, ax=ax)
+        ax.scatter(self.point_x, self.point_y, c="r")
+    def make_plot_json(self, data):
+        d = {
+            "data": [go.Scatter(x=data[self.x], y=data[self.y], mode="markers"), go.Scatter(x=self.point_x, y=self.point_y, mode="markers")],
+            "layout": {
+                "title": self.name,
+                "margins": {"r": 0, "t": 0, "b": 0, "l": 0, "pad": 0},
+            },
+        }
+        return json.dumps(d, cls=plotly.utils.PlotlyJSONEncoder)
