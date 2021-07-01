@@ -12,7 +12,7 @@
         <svg class="bi me-2" width="16" height="16">
             <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#table"></use>
         </svg>
-        <span class="d-none d-md-inline">Prédiction</span>
+        <span>Prédiction</span>
     </a>
 </li>
 <li class="nav-item">
@@ -20,7 +20,7 @@
         <svg class="bi me-2" width="16" height="16">
             <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#card-list"></use>
         </svg>
-        <span class="d-none d-md-inline">Liste logement</span>
+        <span>Liste logement</span>
     </a>
 </li>
 {% if current_user.has_permissions(["admin.read"]) %}     
@@ -29,7 +29,7 @@
         <svg class="bi me-2" width="16" height="16">
             <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#file-bar-graph"></use>
         </svg>
-        <span class="d-none d-md-inline">Visualiser la régression</span>
+        <span>Visualiser la régression</span>
     </a>
 </li>
 {% endif %}
@@ -38,6 +38,6 @@
         <svg class="bi me-2" width="16" height="16">
             <use xlink:href="{{ url_for('static', filename='img/bootstrap-icons.svg') }}#patch-question"></use>
         </svg>
-        <span class="d-none d-md-inline">FAQ</span>
+        <span>FAQ</span>
     </a>
 </li>
