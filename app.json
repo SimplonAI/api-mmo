@@ -1,0 +1,6 @@
+{
+    "name": "Ai-Stimate",
+    "description": "L'application phare d'estimation de prix immobiliers en Californie !",
+    "stack": "container",
+    "addons": ["heroku-postgresql:hobby-dev"]
+}

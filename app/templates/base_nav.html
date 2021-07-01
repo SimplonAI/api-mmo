@@ -115,4 +115,9 @@
     customElements.define("toast-element", ToastElement)
 </script>
 {% block scripts %}{% endblock %}
+<script type="text/javascript">
+    if('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js');
+    }
+</script>
 {% endblock %}
